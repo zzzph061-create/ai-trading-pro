@@ -1,178 +1,338 @@
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b1220">
 <title>AI Trading PRO</title>
-
 <style>
-* {
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-  padding: 15px;
-  background: #08111f;
-  color: white;
-  font-family: Arial, sans-serif;
-}
-
-header {
-  text-align: center;
-  padding: 15px 0;
-}
-
-h1 {
-  color: #20d69a;
-  font-size: 27px;
-}
-
-p {
-  color: #aab8ca;
-}
-
-.panel {
-  background: #142237;
-  padding: 15px;
-  border-radius: 12px;
-  margin-bottom: 15px;
-}
-
-label {
-  display: block;
-  margin-bottom: 8px;
-  color: #20d69a;
-}
-
-select {
-  width: 100%;
-  padding: 13px;
-  margin-bottom: 15px;
-  background: #263a53;
-  color: white;
-  border: 1px solid #20d69a;
-  border-radius: 8px;
-  font-size: 16px;
-}
-
-#chart {
-  width: 100%;
-  height: 500px;
-  overflow: hidden;
-}
-
-footer {
-  text-align: center;
-  color: #8b9bb0;
-  font-size: 12px;
-  padding: 15px;
-}
+:root{color-scheme:dark;--panel:#142136;--muted:#9aabc2;--line:#293b54;--green:#39d98a;--red:#ff6b75;--gold:#ffd166}
+*{box-sizing:border-box}
+body{margin:0;padding:15px;background:#0b1220;color:#eef4ff;font:15px system-ui,Arial,sans-serif}
+main{max-width:760px;margin:auto}
+header{display:flex;align-items:center;gap:12px;padding:15px 4px}
+.logo{width:44px;height:44px;border-radius:14px;background:#173d36;color:var(--green);display:grid;place-items:center;font-size:25px}
+h1{font-size:20px;margin:0}
+header p{margin:3px 0;color:var(--muted);font-size:11px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:15px;margin:12px 0}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.muted{color:var(--muted)}
+.small{font-size:12px}
+select,button{font:inherit;color:#eef4ff;background:#1d2e46;border:1px solid #3a506d;border-radius:11px;padding:10px 12px}
+button{cursor:pointer}
+button.primary{background:#176b4c;border-color:#21865f;width:100%;margin-top:12px;font-weight:bold}
+.price{font-size:29px;font-weight:800;margin:12px 0 2px}
+.status{display:inline-flex;align-items:center;gap:6px;font-size:12px}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--gold)}
+.dot.live{background:var(--green)}
+#chart{height:245px;width:100%;display:block;background:#0e1929;border-radius:10px;margin-top:13px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.metric{background:#0e1929;padding:11px;border-radius:11px;min-width:0}
+.metric b{display:block;font-size:16px;margin-top:4px;overflow-wrap:anywhere}
+.signal{font-size:23px;font-weight:850;margin:12px 0 5px}
+.buy{color:var(--green)}
+.sell{color:var(--red)}
+.wait{color:var(--gold)}
+.note{border-left:3px solid #79aaff;background:#10243b;border-radius:7px;padding:10px 12px;color:#c9d9ef;font-size:12px;line-height:1.55;margin-top:12px}
+.error{color:#ffb4b9}
+.timestamp{font-size:11px;color:var(--muted);margin-top:5px}
+footer{text-align:center;color:#8293aa;font-size:11px;padding:14px}
+@media(max-width:430px){#chart{height:220px}}
 </style>
 </head>
-
 <body>
-
+<main>
 <header>
+<div class="logo">✦</div>
+<div>
 <h1>AI TRADING PRO</h1>
-<p>Forex Analysis Dashboard</p>
+<p>ANÁLISE FOREX • DADOS DE MERCADO</p>
+</div>
 </header>
 
-<div class="panel">
-
-<label for="pair">Escolha o par Forex</label>
-
+<section class="panel">
+<div class="row">
+<div>
+<b>Mercado Forex</b>
+<div class="muted small">Cotações e candles via fonte externa</div>
+</div>
 <select id="pair">
-<option value="FX:EURUSD">EUR/USD</option>
-<option value="FX:GBPUSD">GBP/USD</option>
-<option value="FX:USDJPY">USD/JPY</option>
+<option value="EURUSD">EUR/USD</option>
+<option value="GBPUSD">GBP/USD</option>
+<option value="USDJPY">USD/JPY</option>
 </select>
+</div>
 
-<label for="period">Escolha o período</label>
-
-<select id="period">
-<option value="1">1 minuto</option>
-<option value="5">5 minutos</option>
-<option value="15" selected>15 minutos</option>
-<option value="30">30 minutos</option>
-<option value="60">1 hora</option>
-<option value="240">4 horas</option>
-<option value="D">Diário</option>
-<option value="W">Semanal</option>
-<option value="M">Mensal</option>
+<div class="row" style="margin-top:12px">
+<label class="small muted" for="interval">Período</label>
+<select id="interval">
+<option value="1m">1 minuto</option>
+<option value="5m">5 minutos</option>
+<option value="15m">15 minutos</option>
+<option value="30m">30 minutos</option>
+<option value="1h">1 hora</option>
+<option value="4h">4 horas</option>
+<option value="1d">1 dia</option>
 </select>
-
 </div>
 
-<div class="panel">
-<h3>Gráfico em tempo real</h3>
-<div id="chart"></div>
+<div class="price" id="price">Aguardando cotação...</div>
+<div class="row">
+<span id="marketStatus" class="status">
+<i class="dot"></i>Conectando...
+</span>
+<span id="spread" class="muted small"></span>
 </div>
 
-<div class="panel">
-<h3>AI Trading PRO</h3>
-<p>
-Selecione um par Forex e um período para acompanhar
-o comportamento do mercado.
-</p>
-<p>
-A análise automatizada por inteligência artificial
-será integrada em uma próxima etapa.
-</p>
-</div>
+<canvas id="chart" aria-label="Gráfico Forex"></canvas>
+<div class="timestamp" id="updated">Aguardando atualização...</div>
+<button class="primary" id="refresh">ANALISAR MERCADO</button>
+</section>
 
-<footer>
-AI Trading PRO © 2026
-<br><br>
-Dados e gráficos fornecidos pelo TradingView.
-Não constitui recomendação de investimento.
-</footer>
+<section class="panel">
+<div class="row">
+<b>Indicadores calculados</b>
+<span class="muted small">Análise técnica</span>
+</div>
+<div class="grid">
+<div class="metric">
+<span class="muted small">RSI (14)</span>
+<b id="rsi">—</b>
+</div>
+<div class="metric">
+<span class="muted small">MACD</span>
+<b id="macd">—</b>
+</div>
+<div class="metric">
+<span class="muted small">EMA 9 / 21</span>
+<b id="ema">—</b>
+</div>
+</div>
+</section>
+
+<section class="panel">
+<b>Resultado da análise</b>
+<div id="signal" class="signal wait">AGUARDANDO DADOS</div>
+<div id="reason" class="muted small">
+Clique em Analisar mercado para atualizar os indicadores.
+</div>
+<div class="note">
+COMPRA, VENDA e AGUARDAR são classificações experimentais.
+Não são recomendações nem previsões. O sistema não executa ordens.
+Forex envolve risco elevado. Teste primeiro em conta demo.
+</div>
+</section>
+
+<footer>AI Trading PRO • Protótipo</footer>
+</main>
 
 <script>
-function carregarGrafico() {
+const API='https://biquote.io/api';
+const pairEl=document.getElementById('pair');
+const intEl=document.getElementById('interval');
+const $=id=>document.getElementById(id);
+let busy=false,lastBars=[];
 
-  const chart = document.getElementById("chart");
-  chart.innerHTML = "";
-
-  const widget = document.createElement("div");
-  widget.className = "tradingview-widget-container__widget";
-  chart.appendChild(widget);
-
-  const script = document.createElement("script");
-
-  script.src =
-  "https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js";
-
-  script.async = true;
-
-  script.textContent = JSON.stringify({
-    autosize: true,
-    symbol: document.getElementById("pair").value,
-    interval: document.getElementById("period").value,
-    timezone: "Etc/UTC",
-    theme: "dark",
-    style: "1",
-    locale: "br",
-    allow_symbol_change: false,
-    hide_top_toolbar: false,
-    hide_legend: false,
-    save_image: false,
-    calendar: false,
-    support_host: "https://www.tradingview.com"
-  });
-
-  chart.appendChild(script);
+function fmt(n){
+return Number(n).toFixed(pairEl.value==='USDJPY'?3:5);
 }
 
-document.getElementById("pair")
-.addEventListener("change", carregarGrafico);
+function ema(values,period){
+if(values.length<period)return null;
+let k=2/(period+1);
+let v=values.slice(0,period).reduce((a,b)=>a+b,0)/period;
+for(let i=period;i<values.length;i++){
+v=values[i]*k+v*(1-k);
+}
+return v;
+}
 
-document.getElementById("period")
-.addEventListener("change", carregarGrafico);
+function rsi(values,p=14){
+if(values.length<=p)return null;
+let gain=0,loss=0;
+for(let i=values.length-p;i<values.length;i++){
+let d=values[i]-values[i-1];
+if(d>0)gain+=d;
+else loss-=d;
+}
+gain/=p;
+loss/=p;
+if(loss===0)return 100;
+return 100-100/(1+gain/loss);
+}
 
-carregarGrafico();
+function macd(values){
+if(values.length<35)return null;
+let fast=[];
+for(let i=0;i<values.length;i++){
+let a=ema(values.slice(0,i+1),12);
+let b=ema(values.slice(0,i+1),26);
+if(a!==null&&b!==null)fast.push(a-b);
+}
+if(fast.length<9)return null;
+let line=fast[fast.length-1];
+let sig=ema(fast,9);
+return {line,signal:sig,hist:line-sig};
+}
+
+function draw(bars){
+const c=$('chart');
+const ctx=c.getContext('2d');
+const w=c.clientWidth,h=c.clientHeight;
+const dpr=window.devicePixelRatio||1;
+c.width=w*dpr;
+c.height=h*dpr;
+ctx.scale(dpr,dpr);
+ctx.fillStyle='#0e1929';
+ctx.fillRect(0,0,w,h);
+
+if(!bars.length){
+ctx.fillStyle='#9aabc2';
+ctx.fillText('Sem candles disponíveis',12,24);
+return;
+}
+
+const data=bars.slice(-55);
+const lo=Math.min(...data.map(b=>+b.low));
+const hi=Math.max(...data.map(b=>+b.high));
+const pad=(hi-lo)*.12||.0001;
+const min=lo-pad,max=hi+pad;
+
+ctx.strokeStyle='#26364c';
+ctx.lineWidth=1;
+ctx.fillStyle='#8fa3bc';
+ctx.font='10px system-ui';
+
+for(let j=0;j<5;j++){
+let y=12+j*(h-28)/4;
+ctx.beginPath();
+ctx.moveTo(0,y);
+ctx.lineTo(w-48,y);
+ctx.stroke();
+let val=max-(max-min)*j/4;
+ctx.fillText(val.toFixed(pairEl.value==='USDJPY'?3:5),w-45,y+3);
+}
+
+const plotW=w-53;
+const step=plotW/data.length;
+const cw=Math.max(3,step*.55);
+
+data.forEach((b,i)=>{
+let x=i*step+step/2;
+let yo=12+(max-b.open)/(max-min)*(h-28);
+let yc=12+(max-b.close)/(max-min)*(h-28);
+let yh=12+(max-b.high)/(max-min)*(h-28);
+let yl=12+(max-b.low)/(max-min)*(h-28);
+let up=b.close>=b.open;
+
+ctx.strokeStyle=up?'#39d98a':'#ff6b75';
+ctx.fillStyle=ctx.strokeStyle;
+ctx.beginPath();
+ctx.moveTo(x,yh);
+ctx.lineTo(x,yl);
+ctx.stroke();
+ctx.fillRect(x-cw/2,Math.min(yo,yc),cw,Math.max(1.5,Math.abs(yc-yo)));
+});
+}
+
+function analyse(bars){
+let closes=bars
+.filter(b=>!b.isOpen)
+.map(b=>Number(b.close))
+.filter(Number.isFinite);
+
+let rv=rsi(closes);
+let m=macd(closes);
+let e9=ema(closes,9);
+let e21=ema(closes,21);
+
+$('rsi').textContent=rv===null?'—':rv.toFixed(1);
+$('macd').textContent=m===null?'—':m.hist.toFixed(6);
+$('ema').textContent=e9===null||e21===null?'—':`${fmt(e9)} / ${fmt(e21)}`;
+
+if(rv===null||m===null||e9===null||e21===null){
+$('signal').textContent='AGUARDANDO DADOS';
+$('signal').className='signal wait';
+$('reason').textContent='Ainda não há candles suficientes para calcular os indicadores.';
+return;
+}
+
+let up=e9>e21&&m.hist>0&&rv>50&&rv<70;
+let down=e9<e21&&m.hist<0&&rv<50&&rv>30;
+
+let s=up?'COMPRA':down?'VENDA':'AGUARDAR';
+$('signal').textContent=s;
+$('signal').className='signal '+(up?'buy':down?'sell':'wait');
+
+$('reason').textContent=up
+?'EMA 9 acima da EMA 21, MACD positivo e RSI entre 50 e 70. Confirme o contexto e o risco.'
+:down
+?'EMA 9 abaixo da EMA 21, MACD negativo e RSI entre 30 e 50. Confirme o contexto e o risco.'
+:'Os indicadores não estão alinhados. Aguarde uma confirmação.';
+}
+
+async function load(){
+if(busy)return;
+busy=true;
+
+$('marketStatus').innerHTML='<i class="dot"></i>Atualizando...';
+
+try{
+let sym=pairEl.value;
+let iv=intEl.value;
+
+const [quoteRes,barsRes]=await Promise.all([
+fetch(`${API}/${sym}?allowStale=false`,{cache:'no-store'}),
+fetch(`${API}/${sym}/ohlc?interval=${encodeURIComponent(iv)}&limit=150`,{cache:'no-store'})
+]);
+
+if(!quoteRes.ok)throw new Error('Não foi possível obter a cotação.');
+if(!barsRes.ok)throw new Error('Não foi possível obter os candles.');
+
+const q=await quoteRes.json();
+const data=await barsRes.json();
+
+if(!Array.isArray(data.bars)||!data.bars.length){
+throw new Error('A fonte não retornou candles.');
+}
+
+$('price').textContent=fmt(q.mid??q.bid??q.ask);
+$('spread').textContent=q.spread!=null?'Spread: '+Number(q.spread).toFixed(5):'';
+
+const stale=q.stale||q.marketState==='closed'||Number(q.quoteAgeSeconds)>300;
+
+$('marketStatus').innerHTML=
+`<i class="dot ${stale?'':'live'}"></i>${stale?'Cotação antiga ou mercado fechado':'Cotação recente recebida'}`;
+
+$('updated').textContent=
+'Última cotação: '+(q.timestamp?new Date(q.timestamp).toLocaleString('pt-BR'):'horário não informado');
+
+lastBars=data.bars;
+draw(lastBars);
+analyse(lastBars);
+
+}catch(e){
+$('marketStatus').innerHTML=
+'<i class="dot"></i><span class="error">Erro: '+e.message+'</span>';
+
+$('updated').textContent='Verifique a conexão e tente novamente.';
+$('signal').textContent='SEM DADOS CONFIÁVEIS';
+$('signal').className='signal wait';
+$('reason').textContent='A análise foi suspensa porque não foi possível validar a cotação.';
+}finally{
+busy=false;
+}
+}
+
+pairEl.addEventListener('change',load);
+intEl.addEventListener('change',load);
+$('refresh').addEventListener('click',load);
+window.addEventListener('resize',()=>draw(lastBars));
+
+load();
+setInterval(load,15000);
 </script>
-
 </body>
 </html>
+
