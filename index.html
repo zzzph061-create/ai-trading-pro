@@ -555,57 +555,51 @@ function parseTimestamp(value) {
   return number < 1e12 ? number * 1000 : number;
 }
 
-function normalizeCandles(payload) {
-  let rows = payload;
+function normalizeCandles(payload) {const rows = payload?.bars;
 
-  if (!Array.isArray(rows)) {
-    rows = payload?.data ||
-      payload?.candles ||
-      payload?.result ||
-      payload?.ohlc;
-  }
+if (!Array.isArray(rows)) {
 
-  if (!Array.isArray(rows)) {
-    throw new Error("Formato de candles não reconhecido.");
-  }
+  throw new Error("A API não retornou candles válidos.");
 
-  const candles = rows.map(row => {
-    const time = parseTimestamp(
-      row.time ?? row.timestamp ?? row.date
-    );
-
-    const open = Number(row.open ?? row.o);
-    const high = Number(row.high ?? row.h);
-    const low = Number(row.low ?? row.l);
-    const close = Number(row.close ?? row.c);
-
-    if (
-      !Number.isFinite(time) ||
-      !Number.isFinite(open) ||
-      !Number.isFinite(high) ||
-      !Number.isFinite(low) ||
-      !Number.isFinite(close) ||
-      high < low ||
-      high < Math.max(open, close) ||
-      low > Math.min(open, close)
-    ) return null;
-
-    return { time, open, high, low, close };
-  }).filter(Boolean);
-
-  candles.sort((a, b) => a.time - b.time);
-
-  const unique = candles.filter((candle, index) =>
-    index === 0 ||
-    candle.time !== candles[index - 1].time
-  );
-
-  if (unique.length < 12) {
-    throw new Error("Menos de 12 candles válidos.");
-  }
-
-  return unique;
 }
+
+const candles = rows.map(row => {
+
+  const time = parseTimestamp(row.openTime);
+
+  const open = Number(row.open);
+
+  const high = Number(row.high);
+
+  const low = Number(row.low);
+
+  const close = Number(row.close);
+
+  if (
+
+    !Number.isFinite(time) ||
+
+    !Number.isFinite(open) ||
+
+    !Number.isFinite(high) ||
+
+    !Number.isFinite(low) ||
+
+    !Number.isFinite(close)
+
+  ) return null;
+
+  return { time, open, high, low, close };
+
+}).filter(Boolean).sort((a, b) => a.time - b.time);
+
+if (candles.length < 10) {
+
+  throw new Error("Candles insuficientes.");
+
+}
+
+return candles;}
 
 async function fetchCandles(symbol, interval) {
   const url =
@@ -624,10 +618,14 @@ async function fetchCandles(symbol, interval) {
   const candles = normalizeCandles(payload);
 
   const intervalMs = {
-    M1: 60000,
-    M5: 300000,
-    M15: 900000
-  }[interval];
+
+  "1m": 60000,
+
+  "5m": 300000,
+
+  "15m": 900000
+
+}[interval];
 
   const now = Date.now();
 
