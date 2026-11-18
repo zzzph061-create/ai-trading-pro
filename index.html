@@ -1,875 +1,997 @@
 <!DOCTYPE html>
+
 <html lang="pt-BR">
+
 <head>
+
 <meta charset="UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1">
+
 <meta name="theme-color" content="#08111f">
-<title>AI Trading PRO 3.0</title>
+
+<title>AI Trading PRO 3.1</title>
+
 <style>
-:root{--bg:#08111f;--panel:#111d30;--panel2:#17263d;--text:#edf4ff;--muted:#9fb0c8;--line:#263954;--green:#25c28a;--red:#ff647c;--yellow:#f4c45e;--blue:#68a9ff}
-*{box-sizing:border-box}body{margin:0;background:linear-gradient(180deg,#08111f,#0d1728);color:var(--text);font:15px system-ui,-apple-system,Segoe UI,sans-serif}
-header{padding:22px 16px 16px;border-bottom:1px solid var(--line);background:#0b1627}h1{font-size:23px;margin:0 0 5px}header p{margin:0;color:var(--muted);font-size:13px}
-main{max-width:1050px;margin:auto;padding:15px;display:grid;gap:14px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:15px;min-width:0}
-h2{font-size:17px;margin:0 0 12px}.row{display:flex;gap:9px;flex-wrap:wrap;align-items:center}.row>*{flex:1}
-select,input,button,textarea{font:inherit;border-radius:9px;border:1px solid var(--line);padding:11px;background:#0b1729;color:var(--text);min-width:0}
-button{background:#1b4778;border-color:#2d65a3;font-weight:650;cursor:pointer}button.secondary{background:#18273d;border-color:var(--line)}button.danger{background:#522536;border-color:#874052}
-label{display:block;color:var(--muted);font-size:12px;margin:9px 0 5px}.muted{color:var(--muted)}.small{font-size:12px}.statgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.stat{background:var(--panel2);padding:12px;border-radius:10px}.stat b{display:block;font-size:18px;margin-top:4px}
-#chart{height:470px;overflow:hidden;border-radius:10px;background:#0b1729}#chart iframe{width:100%;height:100%;border:0}
-.signal{font-size:21px;font-weight:800}.buy{color:var(--green)}.sell{color:var(--red)}.wait{color:var(--yellow)}
-table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:left;padding:9px 6px;border-bottom:1px solid var(--line)}th{color:var(--muted)}
-.notice{padding:11px;border-radius:9px;background:#1b2a40;color:#c9d8ec;font-size:12px;line-height:1.5}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-@media(max-width:650px){.grid2{grid-template-columns:1fr}#chart{height:390px}.statgrid{grid-template-columns:1fr 1fr}main{padding:10px}}
+
+:root{
+
+--bg:#08111f;
+
+--panel:#111d30;
+
+--panel2:#17263d;
+
+--text:#edf4ff;
+
+--muted:#9aabc3;
+
+--green:#20d69a;
+
+--red:#ff647c;
+
+--yellow:#ffc857;
+
+--border:#263852;
+
+}
+
+*{box-sizing:border-box}
+
+body{
+
+margin:0;
+
+background:var(--bg);
+
+color:var(--text);
+
+font-family:Arial,sans-serif;
+
+padding:15px;
+
+}
+
+main{max-width:950px;margin:auto}
+
+header{text-align:center;padding:12px 0}
+
+h1{font-size:25px;margin:5px}
+
+h2{font-size:17px;margin:0 0 13px}
+
+.muted{color:var(--muted);font-size:12px;line-height:1.5}
+
+.panel{
+
+background:var(--panel);
+
+border:1px solid var(--border);
+
+border-radius:14px;
+
+padding:15px;
+
+margin:13px 0;
+
+}
+
+.grid{
+
+display:grid;
+
+grid-template-columns:repeat(2,minmax(0,1fr));
+
+gap:9px;
+
+}
+
+@media(min-width:650px){
+
+.grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+
+}
+
+.stat{
+
+background:var(--panel2);
+
+padding:12px;
+
+border-radius:10px;
+
+min-width:0;
+
+}
+
+.stat small{
+
+display:block;
+
+color:var(--muted);
+
+font-size:12px;
+
+margin-bottom:7px;
+
+}
+
+.stat strong{font-size:16px;overflow-wrap:anywhere}
+
+.row{
+
+display:grid;
+
+grid-template-columns:1fr 1fr;
+
+gap:10px;
+
+}
+
+label{
+
+display:block;
+
+color:var(--muted);
+
+font-size:12px;
+
+margin:9px 0 5px;
+
+}
+
+select,input,button{
+
+width:100%;
+
+padding:12px;
+
+border-radius:9px;
+
+border:1px solid #344761;
+
+background:var(--panel2);
+
+color:var(--text);
+
+font-size:14px;
+
+}
+
+button{
+
+background:#1769c2;
+
+border:0;
+
+font-weight:bold;
+
+margin-top:10px;
+
+}
+
+button.secondary{background:#34465f}
+
+button.danger{background:#843c4b}
+
+.status{
+
+padding:14px;
+
+border-radius:10px;
+
+text-align:center;
+
+font-weight:bold;
+
+background:#4b3b1c;
+
+color:#ffdc8c;
+
+}
+
+.status.buy{background:#104c3b;color:#70f0bd}
+
+.status.sell{background:#552638;color:#ff9eae}
+
+iframe{
+
+width:100%;
+
+height:390px;
+
+border:0;
+
+border-radius:10px;
+
+}
+
+table{
+
+width:100%;
+
+border-collapse:collapse;
+
+font-size:12px;
+
+}
+
+td,th{
+
+padding:9px 5px;
+
+border-bottom:1px solid var(--border);
+
+text-align:left;
+
+}
+
 </style>
+
 </head>
+
 <body>
-<header><h1>AI Trading PRO 3.0</h1><p>Análise assistida • Gestão de risco • Diário e revisão de operações</p></header>
+
 <main>
-<section class="panel">
-<h2>Mercado e gráfico</h2>
-<div class="row">
-<div><label for="pair">Par</label><select id="pair"><option value="OANDA:EURUSD">EUR/USD</option><option value="OANDA:GBPUSD">GBP/USD</option><option value="OANDA:USDJPY">USD/JPY</option></select></div>
-<div><label for="period">Período</label><select id="period"><option value="15">15 minutos</option><option value="60">1 hora</option><option value="240">4 horas</option><option value="D">1 dia</option></select></div>
-<button id="loadChart">Atualizar gráfico</button>
-</div>
-<div id="chart" aria-label="Gráfico de mercado"></div>
-<p class="small muted">Gráfico fornecido pelo TradingView. A cotação exibida pode diferir da cotação da sua conta XM.</p>
-</section>
-<section class="panel">
-<h2>Análise automática do mercado</h2>
-<div class="statgrid">
-<div class="stat"><span class="muted small">Par selecionado</span><b id="pairLabel">EUR/USD</b></div>
-<div class="stat"><span class="muted small">Período analisado</span><b id="periodLabel">15 minutos</b></div>
-<div class="stat"><span class="muted small">Dados</span><b id="status">Aguardando consulta</b></div>
-<div class="stat"><span class="muted small">Última atualização</span><b id="updatedAt">—</b></div>
-<div class="stat"><span class="muted small">Sinal técnico</span><b class="signal wait" id="signal">AGUARDAR</b></div>
-<div class="stat"><span class="muted small">Tendência (EMA 20/50)</span><b id="trend">—</b></div>
-<div class="stat"><span class="muted small">RSI (14)</span><b id="rsi">—</b></div>
-<div class="stat"><span class="muted small">MACD (12/26/9)</span><b id="macd">—</b></div>
-<div class="stat"><span class="muted small">EMA 20 / EMA 50</span><b id="emas">—</b></div>
-</div>
-<p id="analysisReason" class="notice" style="margin-top:12px">Buscando candles para calcular os indicadores.</p>
-<p class="small muted">A análise consulta candles fechados a cada 60 segundos. Fonte externa biquote; os preços podem diferir da XM. Se os dados estiverem atrasados ou indisponíveis, o sistema não gera sinal.</p>
-<button class="secondary" id="refreshAnalysis" style="margin-top:10px">Atualizar análise agora</button>
-</section>
-<div class="grid2">
-<section class="panel">
-<h2>Gestão de risco</h2>
-<div class="row"><div><label>Saldo da conta (USD)</label><input id="balance" type="number" min="0" step="0.01" value="1000"></div><div><label>Risco por operação (%)</label><input id="riskPct" type="number" min="0.1" max="5" step="0.1" value="1"></div></div>
-<div class="row"><div><label>Preço de entrada</label><input id="entry" type="number" step="any" placeholder="Ex.: 1.08500"></div><div><label>Stop Loss</label><input id="stop" type="number" step="any" placeholder="Preço do stop"></div></div>
-<div class="row"><div><label>Take Profit</label><input id="target" type="number" step="any" placeholder="Preço do alvo"></div><div><label>Direção</label><select id="direction"><option value="COMPRA">COMPRA</option><option value="VENDA">VENDA</option></select></div></div>
-<button id="calcRisk">Calcular risco</button>
-<div class="statgrid" style="margin-top:10px"><div class="stat"><span class="muted small">Risco máximo estimado</span><b id="riskMoney">—</b></div><div class="stat"><span class="muted small">Relação risco/retorno</span><b id="rr">—</b></div></div>
-<p id="riskMsg" class="small muted">Preencha entrada, stop e alvo. O cálculo não substitui o cálculo de lote da corretora.</p>
-</section>
-<section class="panel">
-<h2>Diário de operações</h2>
-<label>Observação / motivo da entrada</label><textarea id="notes" rows="3" style="width:100%" placeholder="Ex.: tendência de alta, suporte, confirmação..."></textarea>
-<div class="row"><div><label>Resultado da operação</label><select id="result"><option value="WIN">WIN (lucro)</option><option value="LOSS">LOSS (prejuízo)</option><option value="BE">BE (empate)</option></select></div><div><label>Resultado financeiro (USD)</label><input id="pnl" type="number" step="0.01" placeholder="Ex.: 15 ou -10"></div></div>
-<button id="saveTrade">Registrar operação</button>
-</section>
-</div>
-<section class="panel">
 
-<h2>Aprendizado com o histórico</h2>
+<header>
 
-<div class="statgrid">
+<h1>AI TRADING PRO 3.1</h1>
 
-<div class="stat"><span class="muted small">Operações registradas</span><b id="total">0</b></div>
+<div class="muted">
 
-<div class="stat"><span class="muted small">Taxa de acerto</span><b id="winrate">—</b></div>
-
-<div class="stat"><span class="muted small">Resultado acumulado</span><b id="net">US$ 0,00</b></div>
-
-<div class="stat"><span class="muted small">Revisão</span><b id="learning">Aguardando dados</b></div>
+Análise multi-timeframe • Gestão de risco • Diário
 
 </div>
 
-<p id="lesson" class="notice" style="margin-top:12px">Registre operações para identificar padrões. O sistema só apresenta estatísticas descritivas; não altera estratégias automaticamente nem garante resultados.</p>
+</header>
+<main class="container">
 
-<div style="overflow-x:auto">
+  <section class="panel">
 
-<table>
+    <div class="section-title">
 
-<thead><tr><th>Data</th><th>Par</th><th>Direção</th><th>Resultado</th><th>USD</th><th>Observação</th></tr></thead>
+      <h2>Mercado</h2>
 
-<tbody id="history"><tr><td colspan="6" class="muted">Nenhuma operação registrada.</td></tr></tbody>
+      <span class="status" id="connectionStatus">Aguardando dados</span>
 
-</table>
+    </div>
 
-</div>
+    <label for="symbol">Escolha o par:</label>
 
-<div class="row" style="margin-top:12px">
+    <select id="symbol">
 
-<button class="secondary" id="export">Exportar histórico (JSON)</button>
+      <option value="EURUSD">EUR/USD</option>
 
-<button class="danger" id="clear">Apagar histórico</button>
+      <option value="GBPUSD">GBP/USD</option>
 
-</div>
+      <option value="USDJPY">USD/JPY</option>
 
-</section>
+    </select>
 
-<section class="notice">
+    <div class="market-info">
 
-Aviso: ferramenta educativa e de apoio à decisão. Não é aconselhamento financeiro, não conecta à XM e não executa ordens. Forex envolve risco elevado; teste em conta demo e confira preço, spread, lote e regras diretamente na corretora.
+      <div>
 
-</section>
+        <small>Preço atual</small>
+
+        <strong id="currentPrice">--</strong>
+
+      </div>
+
+      <div>
+
+        <small>Última atualização</small>
+
+        <strong id="lastUpdate">--</strong>
+
+      </div>
+
+    </div>
+
+    <div class="chart-box">
+
+      <div id="tradingview_chart"></div>
+
+    </div>
+
+  </section>
+
+  <section class="panel">
+
+    <div class="section-title">
+
+      <h2>Análise inteligente</h2>
+
+      <span id="analysisStatus">Aguardando análise</span>
+
+    </div>
+
+    <div class="timeframes">
+
+      <div class="timeframe">
+
+        <small>M15 — Tendência</small>
+
+        <strong id="trendM15">--</strong>
+
+      </div>
+
+      <div class="timeframe">
+
+        <small>M5 — Confirmação</small>
+
+        <strong id="trendM5">--</strong>
+
+      </div>
+
+      <div class="timeframe">
+
+        <small>M1 — Entrada</small>
+
+        <strong id="trendM1">--</strong>
+
+      </div>
+
+    </div>
+
+    <div class="signal-box" id="signalBox">
+
+      <h2 id="signal">AGUARDANDO</h2>
+
+      <p id="signalReason">
+
+        A IA está aguardando dados suficientes para analisar o mercado.
+
+      </p>
+
+    </div>
+
+    <div class="metrics">
+
+      <div>
+
+        <small>Confluência</small>
+
+        <strong id="score">--</strong>
+
+      </div>
+
+      <div>
+
+        <small>RSI</small>
+
+        <strong id="rsiValue">--</strong>
+
+      </div>
+
+      <div>
+
+        <small>MACD</small>
+
+        <strong id="macdValue">--</strong>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <section class="panel">
+
+    <h2>Posição sugerida</h2>
+
+    <div class="position-grid">
+
+      <div>
+
+        <small>Entrada</small>
+
+        <strong id="entryPrice">--</strong>
+
+      </div>
+
+      <div>
+
+        <small>Stop Loss</small>
+
+        <strong id="stopLoss">--</strong>
+
+      </div>
+
+      <div>
+
+        <small>Take Profit</small>
+
+        <strong id="takeProfit">--</strong>
+
+      </div>
+
+      <div>
+
+        <small>Risco/Retorno</small>
+
+        <strong id="riskReward">--</strong>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <section class="panel">
+
+    <h2>Gestão de risco</h2>
+
+    <label for="capital">Capital disponível (USD)</label>
+
+    <input id="capital" type="number" min="1" value="100">
+
+    <label for="riskPercent">Risco por operação (%)</label>
+
+    <input id="riskPercent" type="number" min="0.1"
+
+      max="5" step="0.1" value="1">
+
+    <div class="metrics">
+
+      <div>
+
+        <small>Risco financeiro</small>
+
+        <strong id="riskMoney">US$ 1,00</strong>
+
+      </div>
+
+      <div>
+
+        <small>Limite de risco</small>
+
+        <strong>5%</strong>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <section class="panel">
+
+    <h2>Aprendizado da IA</h2>
+
+    <div class="metrics">
+
+      <div>
+
+        <small>Operações registradas</small>
+
+        <strong id="totalTrades">0</strong>
+
+      </div>
+
+      <div>
+
+        <small>Acertos</small>
+
+        <strong id="winningTrades">0</strong>
+
+      </div>
+
+      <div>
+
+        <small>Erros</small>
+
+        <strong id="losingTrades">0</strong>
+
+      </div>
+
+    </div>
+
+    <p id="learningStatus">
+
+      Aguardando operações registradas para avaliar os resultados.
+
+    </p>
+
+    <button id="exportHistory">Exportar histórico</button>
+
+    <button id="clearHistory" class="secondary">
+
+      Limpar histórico
+
+    </button>
+
+  </section>
 
 </main>
-
 <script>
+"use strict";
 
-const $=id=>document.getElementById(id);
+const $ = id => document.getElementById(id);
 
-const names={'OANDA:EURUSD':'EUR/USD','OANDA:GBPUSD':'GBP/USD','OANDA:USDJPY':'USD/JPY'};
+const state = {
+  symbol: "EURUSD",
+  candles: {},
+  lastAnalysis: null,
+  journal: JSON.parse(
+    localStorage.getItem("aitp30_journal_v2") || "[]"
+  ),
+  timer: null
+};
 
-const periods={'15':'15 minutos','60':'1 hora','240':'4 horas','D':'1 dia'};
+const API_BASE = "https://biquote.io/api";
 
-function loadChart(){
-
- const pair=$('pair').value,period=$('period').value;
-
- $('chart').innerHTML='';
-
- const iframe=document.createElement('iframe');
-
- iframe.src='https://www.tradingview.com/widgetembed/?frameElementId=tradingview_widget&symbol='+encodeURIComponent(pair)+'&interval='+encodeURIComponent(period)+'&hidesidetoolbar=1&symboledit=0&saveimage=0&toolbarbg=%230b1729&theme=dark&style=1&timezone=Etc%2FUTC&locale=br';
-
- iframe.title='Gráfico '+names[pair]+' no período '+periods[period];
-
- $('chart').appendChild(iframe);
-
- $('pairLabel').textContent=names[pair];
-
- $('periodLabel').textContent=periods[period];
-
- $('status').textContent='Gráfico externo';
-
- $('signal').textContent='AGUARDAR';
-
+function setText(id, value) {
+  const element = $(id);
+  if (element) element.textContent = value;
 }
 
-$('loadChart').addEventListener('click',loadChart);
-
-$('pair').addEventListener('change',()=>{loadChart();scheduleAnalysis()});
-
-$('period').addEventListener('change',()=>{loadChart();scheduleAnalysis()});
-
-function calc(){
-
- const bal=Number($('balance').value);
-
- const pct=Number($('riskPct').value);
-
- const e=Number($('entry').value);
-
- const s=Number($('stop').value);
-
- const t=Number($('target').value);
-
- const dir=$('direction').value;
-
- if(!(bal>0&&pct>0&&e>0&&s>0&&t>0)){
-
- $('riskMsg').textContent='Confira os valores: todos precisam ser positivos.';
-
- return null;
-
- }
-
- const valid=dir==='COMPRA'?(s<e&&t>e):(s>e&&t<e);
-
- if(!valid){
-
- $('riskMsg').textContent='Os níveis não correspondem à direção escolhida. Confira entrada, stop e alvo.';
-
- return null;
-
- }
-
- const risk=Math.abs(e-s);
-
- const reward=Math.abs(t-e);
-
- const money=bal*pct/100;
-
- const rr=reward/risk;
-
- $('riskMoney').textContent='US$ '+money.toFixed(2);
-
- $('rr').textContent='1 : '+rr.toFixed(2);
-
- $('riskMsg').textContent='Distância até o stop: '+risk.toFixed(5)+' • Distância até o alvo: '+reward.toFixed(5)+'. O valor em USD é o orçamento de risco, não o lote.';
-
- return {entry:e,stop:s,target:t,riskMoney:money,rr,direction:dir};
-
+function formatPrice(value) {
+  if (!Number.isFinite(value)) return "--";
+  return value.toFixed(
+    state.symbol.endsWith("JPY") ? 3 : 5
+  );
 }
 
-$('calcRisk').addEventListener('click',calc);
-
-const KEY='aitp30_journal_v2';
-
-function getTrades(){
-
- try{return JSON.parse(localStorage.getItem(KEY)||'[]')}
-
- catch(e){return []}
-
+function setStatus(message) {
+  setText("connectionStatus", message);
 }
 
-function saveTrades(a){
-
- localStorage.setItem(KEY,JSON.stringify(a));
-
+function setSignal(signal, reason) {
+  setText("signal", signal);
+  setText("signalReason", reason);
+  $("signalBox").dataset.signal = signal;
 }
 
-function money(n){
-
- return 'US$ '+Number(n||0).toFixed(2);
-
-}
-
-function render(){
-
- const a=getTrades();
-
- const wins=a.filter(x=>x.result==='WIN').length;
-
- const loss=a.filter(x=>x.result==='LOSS').length;
-
- const net=a.reduce((s,x)=>s+Number(x.pnl||0),0);
-
- $('total').textContent=a.length;
-
- $('winrate').textContent=(wins+loss?((wins/(wins+loss))*100).toFixed(1)+'%':'—');
-
- $('net').textContent=money(net);
-
- $('learning').textContent=a.length>=20?'Amostra inicial disponível':'Coletando operações';
-
- $('lesson').textContent=a.length<5
-
- ?'Registre pelo menos 5 operações para começar uma revisão básica. Evite tirar conclusões com poucas amostras.'
-
- :a.length<20
-
- ?'Há '+a.length+' registros. Observe se suas entradas e observações se repetem nos ganhos e perdas; ainda é cedo para recomendar mudanças.'
-
- :'Com '+a.length+' registros, compare os motivos anotados nas operações WIN e LOSS. Esta versão não treina um modelo de IA: organiza resultados para apoiar sua revisão.';
-
- const body=$('history');
-
- body.innerHTML='';
-
- if(!a.length){
-
- body.innerHTML='<tr><td colspan="6" class="muted">Nenhuma operação registrada.</td></tr>';
-
- return;
-
- }
-
- a.slice().reverse().forEach(x=>{
-
- const tr=document.createElement('tr');
-
- [new Date(x.date).toLocaleDateString('pt-BR'),x.pair,x.direction,x.result,money(x.pnl),x.notes||'—'].forEach(v=>{
-
- const td=document.createElement('td');
-
- td.textContent=v;
-
- tr.appendChild(td);
-
- });
-
- body.appendChild(tr);
-
- });
-
-}
-
-$('saveTrade').addEventListener('click',()=>{
-
- const risk=calc();
-
- if(!risk)return;
-
- const pnl=Number($('pnl').value);
-
- if($('pnl').value.trim()===''){
-
- $('riskMsg').textContent='Informe o resultado financeiro antes de registrar.';
-
- return;
-
- }
-
- const a=getTrades();
-
- a.push({
-
- date:new Date().toISOString(),
-
- pair:names[$('pair').value],
-
- period:$('period').value,
-
- direction:$('direction').value,
-
- result:$('result').value,
-
- pnl,
-
- notes:$('notes').value,
-
- entry:risk.entry,
-
- stop:risk.stop,
-
- target:risk.target,
-
- riskMoney:risk.riskMoney,
-
- rr:risk.rr
-
- });
-
- saveTrades(a);
-
- $('notes').value='';
-
- $('pnl').value='';
-
- render();
-
- $('riskMsg').textContent='Operação registrada neste navegador.';
-
-});
-
-$('export').addEventListener('click',()=>{
-
- const blob=new Blob([JSON.stringify(getTrades(),null,2)],{type:'application/json'});
-
- const url=URL.createObjectURL(blob);
-
- const a=document.createElement('a');
-
- a.href=url;
-
- a.download='ai-trading-pro-historico.json';
-
- a.click();
-
- URL.revokeObjectURL(url);
-
-});
-
-$('clear').addEventListener('click',()=>{
-
- if(confirm('Apagar permanentemente o histórico salvo neste navegador?')){
-
- saveTrades([]);
-
- render();
-
- }
-
-});
- const apiIntervals={'15':'15m','60':'1h','240':'4h','D':'1d'};
-
-let analysisTimer=null;
-
-let analysisBusy=false;
-
-function ema(values,period){
-
- if(values.length<period)return null;
-
- const k=2/(period+1);
-
- let value=values.slice(0,period).reduce((a,b)=>a+b,0)/period;
-
- for(let i=period;i<values.length;i++){
-
-  value=values[i]*k+value*(1-k);
-
- }
-
- return value;
-
-}
-
-function rsi(values,period=14){
-
- if(values.length<=period)return null;
-
- let gains=0,losses=0;
-
- for(let i=1;i<=period;i++){
-
-  const d=values[i]-values[i-1];
-
-  if(d>0)gains+=d;
-
-  else losses-=d;
-
- }
-
- let avgGain=gains/period;
-
- let avgLoss=losses/period;
-
- for(let i=period+1;i<values.length;i++){
-
-  const d=values[i]-values[i-1];
-
-  avgGain=(avgGain*(period-1)+Math.max(d,0))/period;
-
-  avgLoss=(avgLoss*(period-1)+Math.max(-d,0))/period;
-
- }
-
- if(avgLoss===0)return 100;
-
- return 100-(100/(1+avgGain/avgLoss));
-
-}
-
-function macd(values){
-
- if(values.length<35)return null;
-
- const line=[];
-
- for(let i=25;i<values.length;i++){
-
-  const subset=values.slice(0,i+1);
-
-  line.push(ema(subset,12)-ema(subset,26));
-
- }
-
- const signal=ema(line,9);
-
- return {
-
-  line:line[line.length-1],
-
-  signal,
-
-  hist:line[line.length-1]-signal
-
- };
-
-}
-
-function setSignal(text,kind){
-
- const el=$('signal');
-
- el.textContent=text;
-
- el.className='signal '+kind;
-
-}
-
-async function refreshAnalysis(){
-
- if(analysisBusy)return;
-
- analysisBusy=true;
-
- $('status').textContent='Consultando candles…';
-
- setSignal('AGUARDAR','wait');
-
- try{
-
-  const symbol=$('pair').value.split(':')[1];
-
-  const interval=apiIntervals[$('period').value];
-
-  const url=`https://biquote.io/api/${symbol}/ohlc?interval=${interval}&limit=200`;
-
-  const response=await fetch(url,{cache:'no-store'});
-
-  if(!response.ok)throw new Error('A fonte respondeu HTTP '+response.status);
-
-  const payload=await response.json();
-
-  if(!payload||!Array.isArray(payload.bars)){
-
-   throw new Error('Formato de candles inesperado');
-
+function parseTimestamp(value) {
+  if (typeof value === "string") {
+    const parsed = Date.parse(value);
+    if (Number.isFinite(parsed)) return parsed;
   }
 
-  const bars=payload.bars.filter(b=>
+  const number = Number(value);
+  if (!Number.isFinite(number)) return NaN;
 
-   !b.isOpen&&
-
-   Number.isFinite(Number(b.close))&&
-
-   b.openTime
-
-  ).sort((a,b)=>new Date(a.openTime)-new Date(b.openTime));
-
-  if(bars.length<60){
-
-   throw new Error('Poucos candles fechados para calcular os indicadores (mínimo: 60).');
-
-  }
-
-  const last=bars[bars.length-1];
-
-  const lastTime=new Date(last.openTime);
-
-  const age=(Date.now()-lastTime.getTime())/1000;
-
-  const tfSeconds={
-
-   '15':900,
-
-   '60':3600,
-
-   '240':14400,
-
-   'D':86400
-
-  }[$('period').value];
-
-  const maxAge=$('period').value==='D'?259200:tfSeconds*2.5;
-
-  if(!Number.isFinite(lastTime.getTime())||age>maxAge){
-
-   $('status').textContent='Dados atrasados';
-
-   $('updatedAt').textContent=lastTime.toLocaleString('pt-BR');
-
-   $('analysisReason').textContent='O último candle fechado está antigo para este período. Pode ser mercado fechado ou atraso da fonte. Nenhum sinal será emitido.';
-
-   $('rsi').textContent='—';
-
-   $('macd').textContent='—';
-
-   $('emas').textContent='—';
-
-   $('trend').textContent='Indisponível';
-
-   setSignal('AGUARDAR','wait');
-
-   return;
-
-  }
-
-  const closes=bars.map(b=>Number(b.close));
-
-  const e20=ema(closes,20);
-
-  const e50=ema(closes,50);
-
-  const rv=rsi(closes,14);
-
-  const m=macd(closes);
-
-  if(e20===null||e50===null||rv===null||!m||
-
-  ![e20,e50,rv,m.line,m.signal].every(Number.isFinite)){
-
-   throw new Error('Não foi possível calcular todos os indicadores.');
-
-  }
-
-  const bullish=e20>e50&&m.hist>0&&rv>50&&rv<70;
-
-  const bearish=e20<e50&&m.hist<0&&rv<50&&rv>30;
-
-  $('status').textContent='Dados recebidos';
-
-  $('updatedAt').textContent=new Date().toLocaleTimeString('pt-BR');
-
-  $('rsi').textContent=rv.toFixed(1);
-
-  $('macd').textContent=m.line.toFixed(6)+' / '+m.signal.toFixed(6);
-
-  $('emas').textContent=e20.toFixed(5)+' / '+e50.toFixed(5);
-
-  $('trend').textContent=e20>e50?'Alta':e20<e50?'Baixa':'Lateral';
-
-  if(bullish){
-
-   setSignal('COMPRA','buy');
-
-   $('analysisReason').textContent='Confluência técnica de alta: EMA 20 acima da EMA 50, MACD positivo e RSI entre 50 e 70. É uma leitura técnica, não garantia de movimento.';
-
-  }else if(bearish){
-
-   setSignal('VENDA','sell');
-
-   $('analysisReason').textContent='Confluência técnica de baixa: EMA 20 abaixo da EMA 50, MACD negativo e RSI entre 30 e 50. É uma leitura técnica, não garantia de movimento.';
-
-  }else{
-
-   setSignal('AGUARDAR','wait');
-
-   $('analysisReason').textContent='Os indicadores não apresentam confirmação conjunta para compra ou venda. Aguarde uma configuração mais clara.';
-
-  }
-
- }catch(err){
-
-  $('status').textContent='Falha na consulta';
-
-  $('updatedAt').textContent=new Date().toLocaleTimeString('pt-BR');
-
-  $('analysisReason').textContent=err.message+' Confira a conexão e tente novamente. Nenhum sinal foi gerado.';
-
-  $('rsi').textContent='—';
-
-  $('macd').textContent='—';
-
-  $('emas').textContent='—';
-
-  $('trend').textContent='Indisponível';
-
-  setSignal('AGUARDAR','wait');
-
- }finally{
-
-  analysisBusy=false;
-
- }
-
+  return number < 1e12 ? number * 1000 : number;
 }
 
-function scheduleAnalysis(){
+function normalizeCandles(payload) {
+  let rows = payload;
 
- if(analysisTimer)clearInterval(analysisTimer);
+  if (!Array.isArray(rows)) {
+    rows = payload?.data ||
+      payload?.candles ||
+      payload?.result ||
+      payload?.ohlc;
+  }
 
- refreshAnalysis();
+  if (!Array.isArray(rows)) {
+    throw new Error("Formato de candles não reconhecido.");
+  }
 
- analysisTimer=setInterval(refreshAnalysis,60000);
+  const candles = rows.map(row => {
+    const time = parseTimestamp(
+      row.time ?? row.timestamp ?? row.date
+    );
 
-}
+    const open = Number(row.open ?? row.o);
+    const high = Number(row.high ?? row.h);
+    const low = Number(row.low ?? row.l);
+    const close = Number(row.close ?? row.c);
 
-$('refreshAnalysis').addEventListener('click',refreshAnalysis);
+    if (
+      !Number.isFinite(time) ||
+      !Number.isFinite(open) ||
+      !Number.isFinite(high) ||
+      !Number.isFinite(low) ||
+      !Number.isFinite(close) ||
+      high < low ||
+      high < Math.max(open, close) ||
+      low > Math.min(open, close)
+    ) return null;
 
-loadChart();
+    return { time, open, high, low, close };
+  }).filter(Boolean);
 
-render();
+  candles.sort((a, b) => a.time - b.time);
 
-scheduleAnalysis();
-// ===== PONTO DE ENTRADA AI TRADING PRO =====
-
-const entryPanel = document.createElement('section');
-
-entryPanel.className = 'panel';
-
-entryPanel.innerHTML = `
-
-<h2>Ponto exato de entrada</h2>
-
-<div class="statgrid">
-
- <div class="stat">Direção<b id="entryDirection">AGUARDAR</b></div>
-
- <div class="stat">Preço atual<b id="entryCurrent">—</b></div>
-
- <div class="stat">Preço de entrada<b id="entryTrigger">—</b></div>
-
- <div class="stat">Stop Loss<b id="entrySL">—</b></div>
-
- <div class="stat">Take Profit<b id="entryTP">—</b></div>
-
- <div class="stat">Confirmação<b id="entryStatus">Aguardando dados</b></div>
-
-</div>
-
-<p id="entryReason" class="notice" style="margin-top:12px">
-
-Aguardando confirmação dos dados do mercado.
-
-</p>
-
-`;
-
-document.querySelector('main').insertBefore(
-
- entryPanel,
-
- document.querySelector('main').lastElementChild
-
-);
-
-async function updateEntryPlan(){
-
- try{
-
-  const symbol=$('pair').value.split(':')[1];
-
-  const interval=apiIntervals[$('period').value];
-
-  const response=await fetch(
-
-   `https://biquote.io/api/${symbol}/ohlc?interval=${interval}&limit=200`,
-
-   {cache:'no-store'}
-
+  const unique = candles.filter((candle, index) =>
+    index === 0 ||
+    candle.time !== candles[index - 1].time
   );
 
-  if(!response.ok)throw new Error('Fonte de preços indisponível');
-
-  const payload=await response.json();
-
-  if(!Array.isArray(payload.bars)){
-
-   throw new Error('Dados incompatíveis');
-
+  if (unique.length < 12) {
+    throw new Error("Menos de 12 candles válidos.");
   }
 
-  const bars=payload.bars
-
-   .filter(b=>Number.isFinite(Number(b.close)))
-
-   .sort((a,b)=>new Date(a.openTime)-new Date(b.openTime));
-
-  const closed=bars.filter(b=>!b.isOpen);
-
-  const current=bars.filter(b=>b.isOpen).slice(-1)[0];
-
-  if(closed.length<60||!current){
-
-   throw new Error('Aguardando candle atual e candles fechados');
-
-  }
-
-  const last=closed[closed.length-1];
-
-  const previous=closed[closed.length-2];
-
-  const closes=closed.map(b=>Number(b.close));
-
-  const e20=ema(closes,20);
-
-  const e50=ema(closes,50);
-
-  const rv=rsi(closes,14);
-
-  const m=macd(closes);
-
-  const price=Number(current.close);
-
-  const high=Number(last.high);
-
-  const low=Number(last.low);
-
-  if(![price,high,low,e20,e50,rv,m.hist].every(Number.isFinite)){
-
-   throw new Error('Valores de mercado inválidos');
-
-  }
-
-  const range=Math.max(high-low,Math.abs(Number(last.close)-Number(previous.close)));
-
-  const buffer=range*0.05;
-
-  let direction='AGUARDAR';
-
-  let trigger=0;
-
-  let sl=0;
-
-  let tp=0;
-
-  if(e20>e50&&m.hist>0&&rv>50&&rv<70){
-
-   direction='COMPRA';
-
-   trigger=high+buffer;
-
-   sl=low-buffer;
-
-   tp=trigger+(trigger-sl)*2;
-
-  }else if(e20<e50&&m.hist<0&&rv<50&&rv>30){
-
-   direction='VENDA';
-
-   trigger=low-buffer;
-
-   sl=high+buffer;
-
-   tp=trigger-(sl-trigger)*2;
-
-  }
-
-  const digits=symbol==='USDJPY'?3:5;
-
-  const format=n=>n.toFixed(digits);
-
-  $('entryDirection').textContent=direction;
-
-  $('entryCurrent').textContent=format(price);
-
-  if(direction==='AGUARDAR'){
-
-   $('entryTrigger').textContent='—';
-
-   $('entrySL').textContent='—';
-
-   $('entryTP').textContent='—';
-
-   $('entryStatus').textContent='Sem confirmação';
-
-   $('entryReason').textContent='Os indicadores não confirmam uma entrada. Aguarde.';
-
-   return;
-
-  }
-
-  $('entryTrigger').textContent=format(trigger);
-
-  $('entrySL').textContent=format(sl);
-
-  $('entryTP').textContent=format(tp);
-
-  const reached=direction==='COMPRA'
-
-   ?price>=trigger
-
-   :price<=trigger;
-
-  $('entryStatus').textContent=reached
-
-   ?'Gatilho atingido'
-
-   :'Aguardar preço';
-
-  $('entryReason').textContent=reached
-
-   ?'O preço de referência atingiu o gatilho. Confira a cotação, o spread e a confirmação na XM antes de decidir.'
-
-   :'Aguarde o preço atingir '+format(trigger)+'. A entrada ainda não foi confirmada.';
-
- }catch(error){
-
-  $('entryDirection').textContent='AGUARDAR';
-
-  $('entryStatus').textContent='Indisponível';
-
-  $('entryReason').textContent=error.message+'. Nenhuma entrada foi confirmada.';
-
- }
-
+  return unique;
 }
 
-updateEntryPlan();
+async function fetchCandles(symbol, interval) {
+  const url =
+    `${API_BASE}/${symbol}/ohlc` +
+    `?interval=${interval}&limit=200`;
 
-setInterval(updateEntryPlan,60000);
+  const response = await fetch(url, {
+    cache: "no-store"
+  });
 
-// ===== FIM DO PONTO DE ENTRADA =====
+  if (!response.ok) {
+    throw new Error(`Erro HTTP ${response.status}`);
+  }
+
+  const payload = await response.json();
+  const candles = normalizeCandles(payload);
+
+  const intervalMs = {
+    M1: 60000,
+    M5: 300000,
+    M15: 900000
+  }[interval];
+
+  const now = Date.now();
+
+  const closed = candles.filter(candle =>
+    candle.time + intervalMs <= now
+  );
+
+  if (closed.length < 10) {
+    throw new Error(
+      `${interval}: candles fechados insuficientes.`
+    );
+  }
+
+  const latest = closed[closed.length - 1];
+
+  if (now - (latest.time + intervalMs) > intervalMs * 3) {
+    throw new Error(
+      `${interval}: dados antigos ou atrasados.`
+    );
+  }
+
+  return closed;
+}
+
+function ema(values, period) {
+  if (values.length < period) return [];
+
+  const result = [];
+  const multiplier = 2 / (period + 1);
+
+  let previous = values
+    .slice(0, period)
+    .reduce((sum, value) => sum + value, 0) / period;
+
+  result[period - 1] = previous;
+
+  for (let i = period; i < values.length; i++) {
+    previous =
+      (values[i] - previous) * multiplier + previous;
+    result[i] = previous;
+  }
+
+  return result;
+}
+
+function calculateRSI(values, period = 14) {
+  if (values.length <= period) return null;
+
+  let gains = 0;
+  let losses = 0;
+
+  for (let i = 1; i <= period; i++) {
+    const difference = values[i] - values[i - 1];
+
+    if (difference > 0) gains += difference;
+    else losses -= difference;
+  }
+
+  let averageGain = gains / period;
+  let averageLoss = losses / period;
+
+  for (let i = period + 1; i < values.length; i++) {
+    const difference = values[i] - values[i - 1];
+
+    averageGain =
+      (averageGain * (period - 1) +
+        Math.max(difference, 0)) / period;
+
+    averageLoss =
+      (averageLoss * (period - 1) +
+        Math.max(-difference, 0)) / period;
+  }
+
+  if (averageLoss === 0) return 100;
+
+  const relativeStrength = averageGain / averageLoss;
+  return 100 - 100 / (1 + relativeStrength);
+}
+
+function calculateMACD(values) {
+  const fast = ema(values, 12);
+  const slow = ema(values, 26);
+
+  const macdLine = values.map((_, index) =>
+    fast[index] != null && slow[index] != null
+      ? fast[index] - slow[index]
+      : null
+  );
+
+  const valid = macdLine.filter(Number.isFinite);
+  const signalLine = ema(valid, 9);
+
+  if (!valid.length || !signalLine.length) return null;
+
+  return {
+    line: valid[valid.length - 1],
+    signal: signalLine[signalLine.length - 1]
+  };
+}
+
+function analyzeTimeframe(candles) {
+  const closes = candles.map(c => c.close);
+
+  const ema20 = ema(closes, 20);
+  const ema50 = ema(closes, 50);
+
+  const last20 = ema20[ema20.length - 1];
+  const last50 = ema50[ema50.length - 1];
+
+  const rsi = calculateRSI(closes);
+  const macd = calculateMACD(closes);
+
+  if (
+    !Number.isFinite(last20) ||
+    !Number.isFinite(last50) ||
+    !Number.isFinite(rsi) ||
+    !macd
+  ) {
+    throw new Error("Indicadores insuficientes.");
+  }
+
+  let trend = "LATERAL";
+
+  if (last20 > last50) trend = "ALTA";
+  if (last20 < last50) trend = "BAIXA";
+
+  return {
+    trend,
+    rsi,
+    macd,
+    ema20: last20,
+    ema50: last50,
+    last: candles[candles.length - 1],
+    previous: candles[candles.length - 2],
+    candles
+  };
+}
 </script>
+<script>
+function determineEntry(m15, m5, m1) {
+  const bullish =
+    m15.trend === "ALTA" &&
+    m5.trend === "ALTA" &&
+    m1.trend === "ALTA" &&
+    m1.rsi > 50 &&
+    m1.rsi < 70 &&
+    m1.macd.line > m1.macd.signal &&
+    m1.last.close > m1.previous.high;
 
+  const bearish =
+    m15.trend === "BAIXA" &&
+    m5.trend === "BAIXA" &&
+    m1.trend === "BAIXA" &&
+    m1.rsi < 50 &&
+    m1.rsi > 30 &&
+    m1.macd.line < m1.macd.signal &&
+    m1.last.close < m1.previous.low;
+
+  if (bullish) return "COMPRA";
+  if (bearish) return "VENDA";
+  return "AGUARDAR";
+}
+
+function calculatePosition(signal, m1) {
+  if (signal === "AGUARDAR") {
+    return {
+      entry: null,
+      stop: null,
+      target: null
+    };
+  }
+
+  const entry = m1.last.close;
+  const recent = m1.candles.slice(-10);
+
+  const stop = signal === "COMPRA"
+    ? Math.min(...recent.map(c => c.low))
+    : Math.max(...recent.map(c => c.high));
+
+  const distance = Math.abs(entry - stop);
+
+  if (!distance || !Number.isFinite(distance)) {
+    throw new Error("Não foi possível calcular o stop.");
+  }
+
+  const target = signal === "COMPRA"
+    ? entry + distance * 2
+    : entry - distance * 2;
+
+  return { entry, stop, target };
+}
+
+function updateRisk() {
+  const capital = Number($("capital").value);
+  const percent = Number($("riskPercent").value);
+
+  const valid = capital > 0 &&
+    percent > 0 &&
+    percent <= 5;
+
+  setText(
+    "riskMoney",
+    valid
+      ? `US$ ${(capital * percent / 100).toFixed(2)}`
+      : "--"
+  );
+}
+
+function updateJournal() {
+  const wins = state.journal.filter(x => x.result === "ACERTO").length;
+  const losses = state.journal.filter(x => x.result === "ERRO").length;
+
+  setText("totalTrades", state.journal.length);
+  setText("winningTrades", wins);
+  setText("losingTrades", losses);
+
+  setText(
+    "learningStatus",
+    state.journal.length
+      ? `Histórico: ${wins} acertos e ${losses} erros. A avaliação é estatística e ainda não representa treinamento automático de um modelo.`
+      : "Aguardando operações registradas."
+  );
+}
+
+function saveJournal() {
+  localStorage.setItem(
+    "aitp30_journal_v2",
+    JSON.stringify(state.journal)
+  );
+  updateJournal();
+}
+
+function renderAnalysis(m15, m5, m1) {
+  setText("trendM15", m15.trend);
+  setText("trendM5", m5.trend);
+  setText("trendM1", m1.trend);
+
+  setText("currentPrice", formatPrice(m1.last.close));
+  setText("lastUpdate", new Date().toLocaleTimeString("pt-BR"));
+
+  setText("rsiValue", m1.rsi.toFixed(1));
+  setText(
+    "macdValue",
+    m1.macd.line > m1.macd.signal ? "POSITIVO" : "NEGATIVO"
+  );
+
+  const signal = determineEntry(m15, m5, m1);
+  const position = calculatePosition(signal, m1);
+
+  const aligned = m15.trend === m5.trend &&
+    m5.trend === m1.trend &&
+    m1.trend !== "LATERAL";
+
+  const score = aligned ? 75 : 30;
+
+  setText("score", `${score}/100`);
+
+  if (signal === "AGUARDAR") {
+    setSignal(
+      "AGUARDAR",
+      "Não há confirmação suficiente nos três períodos. Evite entradas antecipadas."
+    );
+  } else {
+    setSignal(
+      signal,
+      "Confluência técnica encontrada. Confira spread, preço e execução na XM antes de qualquer decisão."
+    );
+  }
+
+  setText("entryPrice", formatPrice(position.entry));
+  setText("stopLoss", formatPrice(position.stop));
+  setText("takeProfit", formatPrice(position.target));
+  setText(
+    "riskReward",
+    signal === "AGUARDAR" ? "--" : "1:2"
+  );
+
+  state.lastAnalysis = {
+    symbol: state.symbol,
+    signal,
+    time: Date.now()
+  };
+
+  setText("analysisStatus", "Análise concluída");
+}
+
+async function runAnalysis() {
+  if (state.busy) return;
+  state.busy = true;
+
+  setStatus("Consultando mercado...");
+  setText("analysisStatus", "Analisando...");
+
+  try {
+    const [data15, data5, data1] = await Promise.all([
+      fetchCandles(state.symbol, "M15"),
+      fetchCandles(state.symbol, "M5"),
+      fetchCandles(state.symbol, "M1")
+    ]);
+
+    const m15 = analyzeTimeframe(data15);
+    const m5 = analyzeTimeframe(data5);
+    const m1 = analyzeTimeframe(data1);
+
+    renderAnalysis(m15, m5, m1);
+
+    setStatus("Dados recebidos");
+  } catch (error) {
+    console.error(error);
+    setStatus("Dados indisponíveis");
+    setText("analysisStatus", "Análise suspensa");
+
+    setSignal(
+      "AGUARDAR",
+      `Não foi possível validar os dados: ${error.message}`
+    );
+
+    setText("score", "--");
+    setText("entryPrice", "--");
+    setText("stopLoss", "--");
+    setText("takeProfit", "--");
+    setText("riskReward", "--");
+  } finally {
+    state.busy = false;
+  }
+}
+
+function changeSymbol() {
+  state.symbol = $("symbol").value;
+  runAnalysis();
+}
+
+$("symbol").addEventListener("change", changeSymbol);
+$("capital").addEventListener("input", updateRisk);
+$("riskPercent").addEventListener("input", updateRisk);
+
+$("exportHistory").addEventListener("click", () => {
+  const blob = new Blob(
+    [JSON.stringify(state.journal, null, 2)],
+    { type: "application/json" }
+  );
+
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+
+  link.href = url;
+  link.download = "ai-trading-historico.json";
+  link.click();
+
+  URL.revokeObjectURL(url);
+});
+
+$("clearHistory").addEventListener("click", () => {
+  if (!confirm("Deseja apagar todo o histórico?")) return;
+
+  state.journal = [];
+  saveJournal();
+});
+
+updateRisk();
+updateJournal();
+
+runAnalysis();
+state.timer = setInterval(runAnalysis, 60000);
+</script>
 </body>
-
 </html>
