@@ -1,586 +1,667 @@
-
-
 <!DOCTYPE html>
-
 <html lang="pt-BR">
-
 <head>
-
 <meta charset="UTF-8">
-
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
 <meta name="theme-color" content="#08111f">
-
 <title>AI Trading PRO 3.0</title>
-
 <style>
-
 :root{--bg:#08111f;--panel:#111d30;--panel2:#17263d;--text:#edf4ff;--muted:#9fb0c8;--line:#263954;--green:#25c28a;--red:#ff647c;--yellow:#f4c45e;--blue:#68a9ff}
-
-*{box-sizing:border-box}
-
-body{margin:0;background:linear-gradient(180deg,#08111f,#0d1728);color:var(--text);font:15px system-ui,-apple-system,Segoe UI,sans-serif}
-
-header{padding:22px 16px 16px;border-bottom:1px solid var(--line);background:#0b1627}
-
-h1{font-size:23px;margin:0 0 5px}
-
-header p{margin:0;color:var(--muted);font-size:13px}
-
-main{max-width:1050px;margin:auto;padding:15px;display:grid;gap:14px}
-
-.panel{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:15px;min-width:0}
-
-h2{font-size:17px;margin:0 0 12px}
-
-.row{display:flex;gap:9px;flex-wrap:wrap;align-items:center}
-
-.row>*{flex:1}
-
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(180deg,#08111f,#0d1728);color:var(--text);font:15px system-ui,-apple-system,Segoe UI,sans-serif}
+header{padding:22px 16px 16px;border-bottom:1px solid var(--line);background:#0b1627}h1{font-size:23px;margin:0 0 5px}header p{margin:0;color:var(--muted);font-size:13px}
+main{max-width:1050px;margin:auto;padding:15px;display:grid;gap:14px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:15px;min-width:0}
+h2{font-size:17px;margin:0 0 12px}.row{display:flex;gap:9px;flex-wrap:wrap;align-items:center}.row>*{flex:1}
 select,input,button,textarea{font:inherit;border-radius:9px;border:1px solid var(--line);padding:11px;background:#0b1729;color:var(--text);min-width:0}
-
-button{background:#1b4778;border-color:#2d65a3;font-weight:650;cursor:pointer}
-
-button.secondary{background:#18273d;border-color:var(--line)}
-
-button.danger{background:#522536;border-color:#874052}
-
-label{display:block;color:var(--muted);font-size:12px;margin:9px 0 5px}
-
-.muted{color:var(--muted)}
-
-.small{font-size:12px}
-
-.statgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
-
-.stat{background:var(--panel2);padding:12px;border-radius:10px}
-
-.stat b{display:block;font-size:18px;margin-top:4px}
-
-#chart{height:470px;overflow:hidden;border-radius:10px;background:#0b1729}
-
-#chart iframe{width:100%;height:100%;border:0}
-
-.signal{font-size:21px;font-weight:800}
-
-.buy{color:var(--green)}
-
-.sell{color:var(--red)}
-
-.wait{color:var(--yellow)}
-
-table{width:100%;border-collapse:collapse;font-size:13px}
-
-th,td{text-align:left;padding:9px 6px;border-bottom:1px solid var(--line)}
-
-th{color:var(--muted)}
-
+button{background:#1b4778;border-color:#2d65a3;font-weight:650;cursor:pointer}button.secondary{background:#18273d;border-color:var(--line)}button.danger{background:#522536;border-color:#874052}
+label{display:block;color:var(--muted);font-size:12px;margin:9px 0 5px}.muted{color:var(--muted)}.small{font-size:12px}.statgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.stat{background:var(--panel2);padding:12px;border-radius:10px}.stat b{display:block;font-size:18px;margin-top:4px}
+#chart{height:470px;overflow:hidden;border-radius:10px;background:#0b1729}#chart iframe{width:100%;height:100%;border:0}
+.signal{font-size:21px;font-weight:800}.buy{color:var(--green)}.sell{color:var(--red)}.wait{color:var(--yellow)}
+table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:left;padding:9px 6px;border-bottom:1px solid var(--line)}th{color:var(--muted)}
 .notice{padding:11px;border-radius:9px;background:#1b2a40;color:#c9d8ec;font-size:12px;line-height:1.5}
-
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-
-@media(max-width:650px){
-
-.grid2{grid-template-columns:1fr}
-
-#chart{height:390px}
-
-.statgrid{grid-template-columns:1fr 1fr}
-
-main{padding:10px}
-
-}
-
+@media(max-width:650px){.grid2{grid-template-columns:1fr}#chart{height:390px}.statgrid{grid-template-columns:1fr 1fr}main{padding:10px}}
 </style>
-
 </head>
-
 <body>
-
-<header>
-
-<h1>AI Trading PRO 3.0</h1>
-
-<p>Análise assistida • Gestão de risco • Diário e revisão de operações</p>
-
-</header>
-
+<header><h1>AI Trading PRO 3.0</h1><p>Análise assistida • Gestão de risco • Diário e revisão de operações</p></header>
 <main>
-
 <section class="panel">
-
 <h2>Mercado e gráfico</h2>
-
 <div class="row">
-
-<div>
-
-<label for="pair">Par</label>
-
-<select id="pair">
-
-<option value="OANDA:EURUSD">EUR/USD</option>
-
-<option value="OANDA:GBPUSD">GBP/USD</option>
-
-<option value="OANDA:USDJPY">USD/JPY</option>
-
-</select>
-
-</div>
-
-<div>
-
-<label for="period">Período</label>
-
-<select id="period">
-
-<option value="15">15 minutos</option>
-
-<option value="60">1 hora</option>
-
-<option value="240">4 horas</option>
-
-<option value="D">1 dia</option>
-
-</select>
-
-</div>
-
+<div><label for="pair">Par</label><select id="pair"><option value="OANDA:EURUSD">EUR/USD</option><option value="OANDA:GBPUSD">GBP/USD</option><option value="OANDA:USDJPY">USD/JPY</option></select></div>
+<div><label for="period">Período</label><select id="period"><option value="15">15 minutos</option><option value="60">1 hora</option><option value="240">4 horas</option><option value="D">1 dia</option></select></div>
 <button id="loadChart">Atualizar gráfico</button>
-
 </div>
-
 <div id="chart" aria-label="Gráfico de mercado"></div>
-
 <p class="small muted">Gráfico fornecido pelo TradingView. A cotação exibida pode diferir da cotação da sua conta XM.</p>
-
 </section>
-
+<section class="panel">
+<h2>Análise automática do mercado</h2>
+<div class="statgrid">
+<div class="stat"><span class="muted small">Par selecionado</span><b id="pairLabel">EUR/USD</b></div>
+<div class="stat"><span class="muted small">Período analisado</span><b id="periodLabel">15 minutos</b></div>
+<div class="stat"><span class="muted small">Dados</span><b id="status">Aguardando consulta</b></div>
+<div class="stat"><span class="muted small">Última atualização</span><b id="updatedAt">—</b></div>
+<div class="stat"><span class="muted small">Sinal técnico</span><b class="signal wait" id="signal">AGUARDAR</b></div>
+<div class="stat"><span class="muted small">Tendência (EMA 20/50)</span><b id="trend">—</b></div>
+<div class="stat"><span class="muted small">RSI (14)</span><b id="rsi">—</b></div>
+<div class="stat"><span class="muted small">MACD (12/26/9)</span><b id="macd">—</b></div>
+<div class="stat"><span class="muted small">EMA 20 / EMA 50</span><b id="emas">—</b></div>
+</div>
+<p id="analysisReason" class="notice" style="margin-top:12px">Buscando candles para calcular os indicadores.</p>
+<p class="small muted">A análise consulta candles fechados a cada 60 segundos. Fonte externa biquote; os preços podem diferir da XM. Se os dados estiverem atrasados ou indisponíveis, o sistema não gera sinal.</p>
+<button class="secondary" id="refreshAnalysis" style="margin-top:10px">Atualizar análise agora</button>
+</section>
+<div class="grid2">
+<section class="panel">
+<h2>Gestão de risco</h2>
+<div class="row"><div><label>Saldo da conta (USD)</label><input id="balance" type="number" min="0" step="0.01" value="1000"></div><div><label>Risco por operação (%)</label><input id="riskPct" type="number" min="0.1" max="5" step="0.1" value="1"></div></div>
+<div class="row"><div><label>Preço de entrada</label><input id="entry" type="number" step="any" placeholder="Ex.: 1.08500"></div><div><label>Stop Loss</label><input id="stop" type="number" step="any" placeholder="Preço do stop"></div></div>
+<div class="row"><div><label>Take Profit</label><input id="target" type="number" step="any" placeholder="Preço do alvo"></div><div><label>Direção</label><select id="direction"><option value="COMPRA">COMPRA</option><option value="VENDA">VENDA</option></select></div></div>
+<button id="calcRisk">Calcular risco</button>
+<div class="statgrid" style="margin-top:10px"><div class="stat"><span class="muted small">Risco máximo estimado</span><b id="riskMoney">—</b></div><div class="stat"><span class="muted small">Relação risco/retorno</span><b id="rr">—</b></div></div>
+<p id="riskMsg" class="small muted">Preencha entrada, stop e alvo. O cálculo não substitui o cálculo de lote da corretora.</p>
+</section>
+<section class="panel">
+<h2>Diário de operações</h2>
+<label>Observação / motivo da entrada</label><textarea id="notes" rows="3" style="width:100%" placeholder="Ex.: tendência de alta, suporte, confirmação..."></textarea>
+<div class="row"><div><label>Resultado da operação</label><select id="result"><option value="WIN">WIN (lucro)</option><option value="LOSS">LOSS (prejuízo)</option><option value="BE">BE (empate)</option></select></div><div><label>Resultado financeiro (USD)</label><input id="pnl" type="number" step="0.01" placeholder="Ex.: 15 ou -10"></div></div>
+<button id="saveTrade">Registrar operação</button>
+</section>
+</div>
 <section class="panel">
 
-<h2>Análise automática do mercado</h2>
+<h2>Aprendizado com o histórico</h2>
 
 <div class="statgrid">
 
-<div class="stat"><span class="muted small">Par selecionado</span><b id="pairLabel">EUR/USD</b></div>
+<div class="stat"><span class="muted small">Operações registradas</span><b id="total">0</b></div>
 
-<div class="stat"><span class="muted small">Período analisado</span><b id="periodLabel">15 minutos</b></div>
+<div class="stat"><span class="muted small">Taxa de acerto</span><b id="winrate">—</b></div>
 
-<div class="stat"><span class="muted small">Dados</span><b id="status">Aguardando consulta</b></div>
+<div class="stat"><span class="muted small">Resultado acumulado</span><b id="net">US$ 0,00</b></div>
 
-<div class="stat"><span class="muted small">Última atualização</span><b id="updatedAt">—</b></div>
-
-<div class="stat"><span class="muted small">Sinal técnico</span><b class="signal wait" id="signal">AGUARDAR</b></div>
-
-<div class="stat"><span class="muted small">Tendência (EMA 20/50)</span><b id="trend">—</b></div>
-
-<div class="stat"><span class="muted small">RSI (14)</span><b id="rsi">—</b></div>
-
-<div class="stat"><span class="muted small">MACD (12/26/9)</span><b id="macd">—</b></div>
-
-<div class="stat"><span class="muted small">EMA 20 / EMA 50</span><b id="emas">—</b></div>
+<div class="stat"><span class="muted small">Revisão</span><b id="learning">Aguardando dados</b></div>
 
 </div>
 
-<p id="analysisReason" class="notice" style="margin-top:12px">Buscando candles para calcular os indicadores.</p>
+<p id="lesson" class="notice" style="margin-top:12px">Registre operações para identificar padrões. O sistema só apresenta estatísticas descritivas; não altera estratégias automaticamente nem garante resultados.</p>
 
-<p class="small muted">A análise consulta candles fechados a cada 60 segundos. Fonte externa; os preços podem diferir da XM. Se os dados estiverem atrasados ou indisponíveis, o sistema não gera sinal.</p>
+<div style="overflow-x:auto">
 
-<button class="secondary" id="refreshAnalysis" style="margin-top:10px">Atualizar análise agora</button>
+<table>
+
+<thead><tr><th>Data</th><th>Par</th><th>Direção</th><th>Resultado</th><th>USD</th><th>Observação</th></tr></thead>
+
+<tbody id="history"><tr><td colspan="6" class="muted">Nenhuma operação registrada.</td></tr></tbody>
+
+</table>
+
+</div>
+
+<div class="row" style="margin-top:12px">
+
+<button class="secondary" id="export">Exportar histórico (JSON)</button>
+
+<button class="danger" id="clear">Apagar histórico</button>
+
+</div>
+
+</section>
+
+<section class="notice">
+
+Aviso: ferramenta educativa e de apoio à decisão. Não é aconselhamento financeiro, não conecta à XM e não executa ordens. Forex envolve risco elevado; teste em conta demo e confira preço, spread, lote e regras diretamente na corretora.
 
 </section>
 
 </main>
 
-
-<section class="panel">
-<h2>Gestão de risco</h2>
-<div class="grid2">
-<div>
-<label for="balance">Saldo da conta (R$)</label>
-<input id="balance" type="number" min="0" step="0.01" placeholder="Informe seu saldo">
-<label for="risk">Risco por operação (%)</label>
-<input id="risk" type="number" min="0.1" max="10" step="0.1" value="1">
-<label for="entry">Preço de entrada</label>
-<input id="entry" type="number" step="0.00001" placeholder="Preço de entrada">
-<label for="stop">Stop Loss</label>
-<input id="stop" type="number" step="0.00001" placeholder="Preço do stop">
-<label for="target">Take Profit</label>
-<input id="target" type="number" step="0.00001" placeholder="Preço do alvo">
-<button id="calculateRisk">Calcular risco</button>
-</div>
-<div class="statgrid">
-<div class="stat"><span class="muted small">Valor em risco</span><b id="riskValue">—</b></div>
-<div class="stat"><span class="muted small">Relação risco/retorno</span><b id="rrValue">—</b></div>
-<div class="stat"><span class="muted small">Distância do stop</span><b id="stopDistance">—</b></div>
-<div class="stat"><span class="muted small">Distância do alvo</span><b id="targetDistance">—</b></div>
-</div>
-</div>
-<p class="notice">O cálculo é uma estimativa. O tamanho da posição, valor do pip, alavancagem, spread e moeda da conta precisam ser considerados antes de operar na XM.</p>
-</section>
-
-<section class="panel">
-<h2>Diário de operações</h2>
-<div class="grid2">
-<div>
-<label for="tradePair">Par operado</label>
-<select id="tradePair">
-<option>EUR/USD</option>
-<option>GBP/USD</option>
-<option>USD/JPY</option>
-</select>
-<label for="tradeResult">Resultado da operação (R$)</label>
-<input id="tradeResult" type="number" step="0.01" placeholder="Ex.: 25 ou -15">
-<label for="tradeNotes">Observações e motivo do resultado</label>
-<textarea id="tradeNotes" rows="3" placeholder="O que aconteceu nesta operação?"></textarea>
-<button id="saveTrade">Registrar operação</button>
-</div>
-<div>
-<div class="statgrid">
-<div class="stat"><span class="muted small">Operações</span><b id="totalTrades">0</b></div>
-<div class="stat"><span class="muted small">Vitórias</span><b id="wins">0</b></div>
-<div class="stat"><span class="muted small">Derrotas</span><b id="losses">0</b></div>
-<div class="stat"><span class="muted small">Resultado total</span><b id="totalResult">R$ 0,00</b></div>
-</div>
-</div>
-</div>
-<h2 style="margin-top:18px">Histórico</h2>
-<div style="overflow-x:auto">
-<table>
-<thead><tr><th>Data</th><th>Par</th><th>Resultado</th><th>Observação</th></tr></thead>
-<tbody id="tradeHistory"><tr><td colspan="4">Nenhuma operação registrada.</td></tr></tbody>
-</table>
-</div>
-<p id="learningReport" class="notice">O sistema apresentará uma revisão estatística conforme você registrar operações.</p>
-<button class="danger" id="clearHistory" style="margin-top:10px">Apagar histórico</button>
-</section>
-
-<section class="panel">
-<h2>Como o sistema aprende</h2>
-<p class="muted">O diário permite comparar vitórias e derrotas, identificar resultados recorrentes e revisar observações. Nesta versão, isso é uma análise estatística do histórico, não um modelo de IA treinado nem uma alteração automática dos sinais.</p>
-<p class="notice">O sistema não executa ordens na XM. Os sinais são informativos e não garantem lucro. Teste os dados e os cálculos em conta demo antes de considerar qualquer operação.</p>
-</section>
-
 <script>
-"use strict";
 
-const $ = id => document.getElementById(id);
+const $=id=>document.getElementById(id);
 
-const pairNames = {
-"OANDA:EURUSD":"EUR/USD",
-"OANDA:GBPUSD":"GBP/USD",
-"OANDA:USDJPY":"USD/JPY"
-};
+const names={'OANDA:EURUSD':'EUR/USD','OANDA:GBPUSD':'GBP/USD','OANDA:USDJPY':'USD/JPY'};
 
-function selectedPair(){
- return $("pair").value;
-}
-
-function selectedPeriod(){
- return $("period").value;
-}
-
-function periodName(value){
- return value==="15"?"15 minutos":
- value==="60"?"1 hora":
- value==="240"?"4 horas":"1 dia";
-}
+const periods={'15':'15 minutos','60':'1 hora','240':'4 horas','D':'1 dia'};
 
 function loadChart(){
- const pair=selectedPair();
- const period=selectedPeriod();
- $("pairLabel").textContent=pairNames[pair];
- $("periodLabel").textContent=periodName(period);
 
- const params=new URLSearchParams({
-  symbol:pair,
-  interval:period,
-  timezone:"Etc/UTC",
-  theme:"dark",
-  style:"1",
-  locale:"br",
-  enable_publishing:"false",
-  hide_top_toolbar:"false",
-  hide_legend:"false",
-  save_image:"false",
-  withdateranges:"true",
-  allow_symbol_change:"false"
- });
+ const pair=$('pair').value,period=$('period').value;
 
- $("chart").innerHTML=
- '<iframe title="Gráfico TradingView" src="https://www.tradingview.com/widgetembed/?'+
- params.toString()+'" loading="lazy" allowfullscreen></iframe>';
+ $('chart').innerHTML='';
+
+ const iframe=document.createElement('iframe');
+
+ iframe.src='https://www.tradingview.com/widgetembed/?frameElementId=tradingview_widget&symbol='+encodeURIComponent(pair)+'&interval='+encodeURIComponent(period)+'&hidesidetoolbar=1&symboledit=0&saveimage=0&toolbarbg=%230b1729&theme=dark&style=1&timezone=Etc%2FUTC&locale=br';
+
+ iframe.title='Gráfico '+names[pair]+' no período '+periods[period];
+
+ $('chart').appendChild(iframe);
+
+ $('pairLabel').textContent=names[pair];
+
+ $('periodLabel').textContent=periods[period];
+
+ $('status').textContent='Gráfico externo';
+
+ $('signal').textContent='AGUARDAR';
+
 }
 
-function ema(values,period){
- if(values.length<period)return null;
- const k=2/(period+1);
- let result=values.slice(0,period).reduce((a,b)=>a+b,0)/period;
- for(let i=period;i<values.length;i++){
-  result=values[i]*k+result*(1-k);
+$('loadChart').addEventListener('click',loadChart);
+
+$('pair').addEventListener('change',()=>{loadChart();scheduleAnalysis()});
+
+$('period').addEventListener('change',()=>{loadChart();scheduleAnalysis()});
+
+function calc(){
+
+ const bal=Number($('balance').value);
+
+ const pct=Number($('riskPct').value);
+
+ const e=Number($('entry').value);
+
+ const s=Number($('stop').value);
+
+ const t=Number($('target').value);
+
+ const dir=$('direction').value;
+
+ if(!(bal>0&&pct>0&&e>0&&s>0&&t>0)){
+
+ $('riskMsg').textContent='Confira os valores: todos precisam ser positivos.';
+
+ return null;
+
  }
- return result;
+
+ const valid=dir==='COMPRA'?(s<e&&t>e):(s>e&&t<e);
+
+ if(!valid){
+
+ $('riskMsg').textContent='Os níveis não correspondem à direção escolhida. Confira entrada, stop e alvo.';
+
+ return null;
+
+ }
+
+ const risk=Math.abs(e-s);
+
+ const reward=Math.abs(t-e);
+
+ const money=bal*pct/100;
+
+ const rr=reward/risk;
+
+ $('riskMoney').textContent='US$ '+money.toFixed(2);
+
+ $('rr').textContent='1 : '+rr.toFixed(2);
+
+ $('riskMsg').textContent='Distância até o stop: '+risk.toFixed(5)+' • Distância até o alvo: '+reward.toFixed(5)+'. O valor em USD é o orçamento de risco, não o lote.';
+
+ return {entry:e,stop:s,target:t,riskMoney:money,rr,direction:dir};
+
+}
+
+$('calcRisk').addEventListener('click',calc);
+
+const KEY='aitp30_journal_v2';
+
+function getTrades(){
+
+ try{return JSON.parse(localStorage.getItem(KEY)||'[]')}
+
+ catch(e){return []}
+
+}
+
+function saveTrades(a){
+
+ localStorage.setItem(KEY,JSON.stringify(a));
+
+}
+
+function money(n){
+
+ return 'US$ '+Number(n||0).toFixed(2);
+
+}
+
+function render(){
+
+ const a=getTrades();
+
+ const wins=a.filter(x=>x.result==='WIN').length;
+
+ const loss=a.filter(x=>x.result==='LOSS').length;
+
+ const net=a.reduce((s,x)=>s+Number(x.pnl||0),0);
+
+ $('total').textContent=a.length;
+
+ $('winrate').textContent=(wins+loss?((wins/(wins+loss))*100).toFixed(1)+'%':'—');
+
+ $('net').textContent=money(net);
+
+ $('learning').textContent=a.length>=20?'Amostra inicial disponível':'Coletando operações';
+
+ $('lesson').textContent=a.length<5
+
+ ?'Registre pelo menos 5 operações para começar uma revisão básica. Evite tirar conclusões com poucas amostras.'
+
+ :a.length<20
+
+ ?'Há '+a.length+' registros. Observe se suas entradas e observações se repetem nos ganhos e perdas; ainda é cedo para recomendar mudanças.'
+
+ :'Com '+a.length+' registros, compare os motivos anotados nas operações WIN e LOSS. Esta versão não treina um modelo de IA: organiza resultados para apoiar sua revisão.';
+
+ const body=$('history');
+
+ body.innerHTML='';
+
+ if(!a.length){
+
+ body.innerHTML='<tr><td colspan="6" class="muted">Nenhuma operação registrada.</td></tr>';
+
+ return;
+
+ }
+
+ a.slice().reverse().forEach(x=>{
+
+ const tr=document.createElement('tr');
+
+ [new Date(x.date).toLocaleDateString('pt-BR'),x.pair,x.direction,x.result,money(x.pnl),x.notes||'—'].forEach(v=>{
+
+ const td=document.createElement('td');
+
+ td.textContent=v;
+
+ tr.appendChild(td);
+
+ });
+
+ body.appendChild(tr);
+
+ });
+
+}
+
+$('saveTrade').addEventListener('click',()=>{
+
+ const risk=calc();
+
+ if(!risk)return;
+
+ const pnl=Number($('pnl').value);
+
+ if($('pnl').value.trim()===''){
+
+ $('riskMsg').textContent='Informe o resultado financeiro antes de registrar.';
+
+ return;
+
+ }
+
+ const a=getTrades();
+
+ a.push({
+
+ date:new Date().toISOString(),
+
+ pair:names[$('pair').value],
+
+ period:$('period').value,
+
+ direction:$('direction').value,
+
+ result:$('result').value,
+
+ pnl,
+
+ notes:$('notes').value,
+
+ entry:risk.entry,
+
+ stop:risk.stop,
+
+ target:risk.target,
+
+ riskMoney:risk.riskMoney,
+
+ rr:risk.rr
+
+ });
+
+ saveTrades(a);
+
+ $('notes').value='';
+
+ $('pnl').value='';
+
+ render();
+
+ $('riskMsg').textContent='Operação registrada neste navegador.';
+
+});
+
+$('export').addEventListener('click',()=>{
+
+ const blob=new Blob([JSON.stringify(getTrades(),null,2)],{type:'application/json'});
+
+ const url=URL.createObjectURL(blob);
+
+ const a=document.createElement('a');
+
+ a.href=url;
+
+ a.download='ai-trading-pro-historico.json';
+
+ a.click();
+
+ URL.revokeObjectURL(url);
+
+});
+
+$('clear').addEventListener('click',()=>{
+
+ if(confirm('Apagar permanentemente o histórico salvo neste navegador?')){
+
+ saveTrades([]);
+
+ render();
+
+ }
+
+});
+ const apiIntervals={'15':'15m','60':'1h','240':'4h','D':'1d'};
+
+let analysisTimer=null;
+
+let analysisBusy=false;
+
+function ema(values,period){
+
+ if(values.length<period)return null;
+
+ const k=2/(period+1);
+
+ let value=values.slice(0,period).reduce((a,b)=>a+b,0)/period;
+
+ for(let i=period;i<values.length;i++){
+
+  value=values[i]*k+value*(1-k);
+
+ }
+
+ return value;
+
 }
 
 function rsi(values,period=14){
+
  if(values.length<=period)return null;
+
  let gains=0,losses=0;
- for(let i=values.length-period;i<values.length;i++){
-  const change=values[i]-values[i-1];
-  if(change>0)gains+=change;
-  else losses-=change;
+
+ for(let i=1;i<=period;i++){
+
+  const d=values[i]-values[i-1];
+
+  if(d>0)gains+=d;
+
+  else losses-=d;
+
  }
- if(losses===0)return 100;
- const rs=(gains/period)/(losses/period);
- return 100-(100/(1+rs));
+
+ let avgGain=gains/period;
+
+ let avgLoss=losses/period;
+
+ for(let i=period+1;i<values.length;i++){
+
+  const d=values[i]-values[i-1];
+
+  avgGain=(avgGain*(period-1)+Math.max(d,0))/period;
+
+  avgLoss=(avgLoss*(period-1)+Math.max(-d,0))/period;
+
+ }
+
+ if(avgLoss===0)return 100;
+
+ return 100-(100/(1+avgGain/avgLoss));
+
 }
 
 function macd(values){
+
  if(values.length<35)return null;
- const fast=ema(values,12);
- const slow=ema(values,26);
- if(fast===null||slow===null)return null;
- const line=fast-slow;
- const series=[];
- for(let i=26;i<values.length;i++){
-  const f=ema(values.slice(0,i+1),12);
-  const s=ema(values.slice(0,i+1),26);
-  if(f!==null&&s!==null)series.push(f-s);
+
+ const line=[];
+
+ for(let i=25;i<values.length;i++){
+
+  const subset=values.slice(0,i+1);
+
+  line.push(ema(subset,12)-ema(subset,26));
+
  }
- const signal=ema(series,9);
- if(signal===null)return null;
- return {line,signal,histogram:line-signal};
+
+ const signal=ema(line,9);
+
+ return {
+
+  line:line[line.length-1],
+
+  signal,
+
+  hist:line[line.length-1]-signal
+
+ };
+
 }
 
-function setSignal(value,reason){
- const el=$("signal");
- el.textContent=value;
- el.className="signal "+(
-  value==="COMPRA"?"buy":
-  value==="VENDA"?"sell":"wait"
- );
- $("analysisReason").textContent=reason;
+function setSignal(text,kind){
+
+ const el=$('signal');
+
+ el.textContent=text;
+
+ el.className='signal '+kind;
+
 }
 
-function formatNumber(value){
- return Number(value).toFixed(5);
-}
+async function refreshAnalysis(){
 
-function getClosedBars(payload){
- if(!payload||!Array.isArray(payload.bars))return [];
- return payload.bars.filter(bar=>
-  bar&&Number.isFinite(Number(bar.close))&&
-  bar.isOpen!==true
- );
-}
+ if(analysisBusy)return;
 
-async function analyzeMarket(){
- const pair=selectedPair();
- const interval=selectedPeriod();
- $("status").textContent="Consultando...";
- setSignal("AGUARDAR","Consultando dados externos. Nenhum sinal será exibido sem dados válidos.");
+ analysisBusy=true;
 
- const symbol=pair.replace("OANDA:","");
- const url="https://biquote.io/api/"+symbol+
- "/ohlc?interval="+encodeURIComponent(interval)+"&limit=200";
+ $('status').textContent='Consultando candles…';
+
+ setSignal('AGUARDAR','wait');
 
  try{
-  const response=await fetch(url,{cache:"no-store"});
-  if(!response.ok)throw new Error("Fonte de dados indisponível.");
+
+  const symbol=$('pair').value.split(':')[1];
+
+  const interval=apiIntervals[$('period').value];
+
+  const url=`https://biquote.io/api/${symbol}/ohlc?interval=${interval}&limit=200`;
+
+  const response=await fetch(url,{cache:'no-store'});
+
+  if(!response.ok)throw new Error('A fonte respondeu HTTP '+response.status);
+
   const payload=await response.json();
-  const bars=getClosedBars(payload);
-  const closes=bars.map(bar=>Number(bar.close));
 
-  if(closes.length<60){
-   throw new Error("Quantidade insuficiente de candles fechados.");
+  if(!payload||!Array.isArray(payload.bars)){
+
+   throw new Error('Formato de candles inesperado');
+
   }
 
-  const lastBar=bars[bars.length-1];
-  const lastTime=Number(lastBar.openTime);
-  if(!Number.isFinite(lastTime)){
-   throw new Error("Horário dos candles não confirmado.");
+  const bars=payload.bars.filter(b=>
+
+   !b.isOpen&&
+
+   Number.isFinite(Number(b.close))&&
+
+   b.openTime
+
+  ).sort((a,b)=>new Date(a.openTime)-new Date(b.openTime));
+
+  if(bars.length<60){
+
+   throw new Error('Poucos candles fechados para calcular os indicadores (mínimo: 60).');
+
   }
 
-  const now=Date.now();
-  const duration=interval==="D"?86400000:Number(interval)*60000;
-  const candleClose=lastTime+duration;
-  if(candleClose>now+60000||now-candleClose>duration*3){
-   throw new Error("Dados atrasados ou candle ainda não confirmado.");
+  const last=bars[bars.length-1];
+
+  const lastTime=new Date(last.openTime);
+
+  const age=(Date.now()-lastTime.getTime())/1000;
+
+  const tfSeconds={
+
+   '15':900,
+
+   '60':3600,
+
+   '240':14400,
+
+   'D':86400
+
+  }[$('period').value];
+
+  const maxAge=$('period').value==='D'?259200:tfSeconds*2.5;
+
+  if(!Number.isFinite(lastTime.getTime())||age>maxAge){
+
+   $('status').textContent='Dados atrasados';
+
+   $('updatedAt').textContent=lastTime.toLocaleString('pt-BR');
+
+   $('analysisReason').textContent='O último candle fechado está antigo para este período. Pode ser mercado fechado ou atraso da fonte. Nenhum sinal será emitido.';
+
+   $('rsi').textContent='—';
+
+   $('macd').textContent='—';
+
+   $('emas').textContent='—';
+
+   $('trend').textContent='Indisponível';
+
+   setSignal('AGUARDAR','wait');
+
+   return;
+
   }
+
+  const closes=bars.map(b=>Number(b.close));
 
   const e20=ema(closes,20);
+
   const e50=ema(closes,50);
-  const r=rsi(closes,14);
+
+  const rv=rsi(closes,14);
+
   const m=macd(closes);
 
-  if(e20===null||e50===null||r===null||m===null){
-   throw new Error("Não foi possível calcular todos os indicadores.");
+  if(e20===null||e50===null||rv===null||!m||
+
+  ![e20,e50,rv,m.line,m.signal].every(Number.isFinite)){
+
+   throw new Error('Não foi possível calcular todos os indicadores.');
+
   }
 
-  $("emas").textContent=formatNumber(e20)+" / "+formatNumber(e50);
-  $("rsi").textContent=r.toFixed(2);
-  $("macd").textContent=m.histogram.toFixed(6);
-  $("trend").textContent=e20>e50?"ALTA":e20<e50?"BAIXA":"LATERAL";
+  const bullish=e20>e50&&m.hist>0&&rv>50&&rv<70;
 
-  let signal="AGUARDAR";
-  let reason="Indicadores sem alinhamento suficiente. Aguardar nova confirmação.";
+  const bearish=e20<e50&&m.hist<0&&rv<50&&rv>30;
 
-  if(e20>e50&&m.histogram>0&&r>=50&&r<=70){
-   signal="COMPRA";
-   reason="EMA 20 acima da EMA 50, MACD positivo e RSI entre 50 e 70. Sinal técnico de compra, sujeito a confirmação.";
-  }else if(e20<e50&&m.histogram<0&&r>=30&&r<=50){
-   signal="VENDA";
-   reason="EMA 20 abaixo da EMA 50, MACD negativo e RSI entre 30 e 50. Sinal técnico de venda, sujeito a confirmação.";
+  $('status').textContent='Dados recebidos';
+
+  $('updatedAt').textContent=new Date().toLocaleTimeString('pt-BR');
+
+  $('rsi').textContent=rv.toFixed(1);
+
+  $('macd').textContent=m.line.toFixed(6)+' / '+m.signal.toFixed(6);
+
+  $('emas').textContent=e20.toFixed(5)+' / '+e50.toFixed(5);
+
+  $('trend').textContent=e20>e50?'Alta':e20<e50?'Baixa':'Lateral';
+
+  if(bullish){
+
+   setSignal('COMPRA','buy');
+
+   $('analysisReason').textContent='Confluência técnica de alta: EMA 20 acima da EMA 50, MACD positivo e RSI entre 50 e 70. É uma leitura técnica, não garantia de movimento.';
+
+  }else if(bearish){
+
+   setSignal('VENDA','sell');
+
+   $('analysisReason').textContent='Confluência técnica de baixa: EMA 20 abaixo da EMA 50, MACD negativo e RSI entre 30 e 50. É uma leitura técnica, não garantia de movimento.';
+
+  }else{
+
+   setSignal('AGUARDAR','wait');
+
+   $('analysisReason').textContent='Os indicadores não apresentam confirmação conjunta para compra ou venda. Aguarde uma configuração mais clara.';
+
   }
 
-  setSignal(signal,reason);
-  $("status").textContent="Dados recebidos";
-  $("updatedAt").textContent=new Date().toLocaleTimeString("pt-BR");
+ }catch(err){
 
- }catch(error){
-  $("status").textContent="Sem dados válidos";
-  $("rsi").textContent="—";
-  $("macd").textContent="—";
-  $("emas").textContent="—";
-  $("trend").textContent="—";
-  setSignal("AGUARDAR",error.message+" Não utilize sinais sem dados confirmados.");
+  $('status').textContent='Falha na consulta';
+
+  $('updatedAt').textContent=new Date().toLocaleTimeString('pt-BR');
+
+  $('analysisReason').textContent=err.message+' Confira a conexão e tente novamente. Nenhum sinal foi gerado.';
+
+  $('rsi').textContent='—';
+
+  $('macd').textContent='—';
+
+  $('emas').textContent='—';
+
+  $('trend').textContent='Indisponível';
+
+  setSignal('AGUARDAR','wait');
+
+ }finally{
+
+  analysisBusy=false;
+
  }
+
 }
 
-$("pair").addEventListener("change",()=>{
- loadChart();
- analyzeMarket();
-});
-$("period").addEventListener("change",()=>{
- loadChart();
- analyzeMarket();
-});
-$("loadChart").addEventListener("click",loadChart);
-$("refreshAnalysis").addEventListener("click",analyzeMarket);
+function scheduleAnalysis(){
 
-$("calculateRisk").addEventListener("click",()=>{
- const balance=Number($("balance").value);
- const risk=Number($("risk").value);
- const entry=Number($("entry").value);
- const stop=Number($("stop").value);
- const target=Number($("target").value);
+ if(analysisTimer)clearInterval(analysisTimer);
 
- if(!(balance>0&&risk>0&&risk<=10&&entry>0&&stop>0&&target>0)){
-  alert("Preencha saldo, risco, entrada, stop e alvo com valores válidos.");
-  return;
- }
+ refreshAnalysis();
 
- const stopDistance=Math.abs(entry-stop);
- const targetDistance=Math.abs(target-entry);
- if(stopDistance===0){
-  alert("O preço de entrada e o stop não podem ser iguais.");
-  return;
- }
+ analysisTimer=setInterval(refreshAnalysis,60000);
 
- const riskAmount=balance*risk/100;
- const rr=targetDistance/stopDistance;
- $("riskValue").textContent=riskAmount.toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
- $("rrValue").textContent="1 : "+rr.toFixed(2);
- $("stopDistance").textContent=formatNumber(stopDistance);
- $("targetDistance").textContent=formatNumber(targetDistance);
-});
-
-const STORAGE_KEY="aitp30_journal_v2";
-let trades=[];
-
-try{
- const saved=JSON.parse(localStorage.getItem(STORAGE_KEY)||"[]");
- if(Array.isArray(saved))trades=saved;
-}catch(error){
- trades=[];
 }
 
-function saveTrades(){
- localStorage.setItem(STORAGE_KEY,JSON.stringify(trades));
-}
-
-function money(value){
- return Number(value).toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
-}
-
-function renderTrades(){
- const body=$("tradeHistory");
- body.innerHTML="";
- let wins=0,losses=0,total=0;
-
- trades.forEach(trade=>{
-  total+=trade.result;
-  if(trade.result>0)wins++;
-  if(trade.result<0)losses++;
-
-  const tr=document.createElement("tr");
-  [trade.date,trade.pair,money(trade.result),trade.notes||"—"].forEach(value=>{
-   const td=document.createElement("td");
-   td.textContent=value;
-   tr.appendChild(td);
-  });
-  body.appendChild(tr);
- });
-
- if(trades.length===0){
-  const tr=document.createElement("tr");
-  const td=document.createElement("td");
-  td.colSpan=4;
-  td.textContent="Nenhuma operação registrada.";
-  tr.appendChild(td);
-  body.appendChild(tr);
- }
-
- $("totalTrades").textContent=trades.length;
- $("wins").textContent=wins;
- $("losses").textContent=losses;
- $("totalResult").textContent=money(total);
-
- if(trades.length){
-  const rate=(wins/trades.length)*100;
-  $("learningReport").textContent=
-   "Revisão estatística: "+rate.toFixed(1)+
-   "% de operações positivas. Resultado acumulado: "+money(total)+
-   ". Use as observações para investigar erros e padrões. Isso não altera automaticamente os sinais.";
- }else{
-  $("learningReport").textContent=
-   "Registre operações para começar a revisão estatística do histórico.";
- }
-}
-
-$("saveTrade").addEventListener("click",()=>{
- const result=Number($("tradeResult").value);
- if($("tradeResult").value.trim()===""||!Number.isFinite(result)){
-  alert("Informe o resultado da operação.");
-  return;
- }
-
- trades.unshift({
-  date:new Date().toLocaleString("pt-BR"),
-  pair:$("tradePair").value,
-  result,
-  notes:$("tradeNotes").value.trim()
- });
-
- saveTrades();
- renderTrades();
- $("tradeResult").value="";
- $("tradeNotes").value="";
-});
-
-$("clearHistory").addEventListener("click",()=>{
- if(!confirm("Tem certeza de que deseja apagar todo o histórico?"))return;
- trades=[];
- saveTrades();
- renderTrades();
-});
+$('refreshAnalysis').addEventListener('click',refreshAnalysis);
 
 loadChart();
-renderTrades();
-analyzeMarket();
-setInterval(analyzeMarket,60000);
+
+render();
+
+scheduleAnalysis();
+
 </script>
+
 </body>
+
 </html>
