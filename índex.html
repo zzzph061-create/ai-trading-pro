@@ -1,0 +1,375 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI Trading PRO</title>
+<script src="https://unpkg.com/lightweight-charts@4.2.2/dist/lightweight-charts.standalone.production.js"></script>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#080e1b;color:#fff;font-family:Arial,sans-serif;padding:16px}
+header{text-align:center;color:#20d6a0;font-size:25px;font-weight:bold;padding:15px}
+.panel{background:#111c30;padding:15px;border-radius:12px;margin-bottom:14px}
+select,button{width:100%;padding:13px;margin:7px 0;border-radius:8px;border:1px solid #34445e;background:#172640;color:white;font-size:16px}
+button{background:#00b889;color:#001b16;font-weight:bold;border:0}
+button:disabled{opacity:.6}
+#chart{height:340px;width:100%}
+.price{font-size:27px;color:#20d6a0;font-weight:bold}
+.signal{font-size:23px;font-weight:bold;text-align:center;padding:15px}
+.green{color:#20d6a0}.red{color:#ff6262}.yellow{color:#ffd166}
+.small{color:#aab8ca;font-size:13px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.value{font-size:19px;font-weight:bold;margin-top:7px}
+#status{color:#ffd166;font-size:13px;min-height:22px}
+</style>
+</head>
+<body>
+
+<header>AI TRADING PRO</header>
+
+<div class="panel">
+  <label>PAR DE MOEDAS</label>
+  <select id="pair">
+    <option value="EURUSD">EUR/USD</option>
+    <option value="GBPUSD">GBP/USD</option>
+    <option value="USDJPY">USD/JPY</option>
+  </select>
+
+  <label>PERÍODO GRÁFICO</label>
+  <select id="period">
+    <option value="1m">1 minuto</option>
+    <option value="5m">5 minutos</option>
+    <option value="15m">15 minutos</option>
+    <option value="30m">30 minutos</option>
+    <option value="1h">1 hora</option>
+    <option value="4h">4 horas</option>
+    <option value="1d">Diário</option>
+  </select>
+
+  <button id="analyze">ANALISAR MERCADO</button>
+  <div id="status">Pronto para analisar.</div>
+</div>
+
+<div class="panel">
+  <div class="small">PREÇO ATUAL</div>
+  <div class="price" id="price">--</div>
+  <div class="small" id="marketState">Aguardando dados...</div>
+</div>
+
+<div class="panel">
+  <div class="small">GRÁFICO DE CANDLES</div>
+  <div id="chart"></div>
+</div>
+
+<div class="panel">
+  <div class="grid">
+    <div>
+      <div class="small">EMA 9</div>
+      <div class="value" id="ema9">--</div>
+    </div>
+    <div>
+      <div class="small">EMA 21</div>
+      <div class="value" id="ema21">--</div>
+    </div>
+    <div>
+      <div class="small">RSI 14</div>
+      <div class="value" id="rsi">--</div>
+    </div>
+    <div>
+      <div class="small">MACD</div>
+      <div class="value" id="macd">--</div>
+    </div>
+  </div>
+</div>
+
+<div class="panel">
+  <div class="small">SINAL DA INTELIGÊNCIA ARTIFICIAL</div>
+  <div id="signal" class="signal yellow">AGUARDANDO ANÁLISE</div>
+  <div id="explanation" class="small">Aguardando dados reais do mercado.</div>
+</div>
+
+<div class="panel small">
+  Dados de mercado: Biquote API.<br>
+  Atualização automática a cada 15 segundos.<br>
+  Ferramenta experimental de análise técnica. Não executa operações financeiras.
+</div>
+
+<script>
+const API = "https://biquote.io/api";
+const $ = id => document.getElementById(id);
+
+let chart = null;
+let candles = null;
+let emaFastLine = null;
+let emaSlowLine = null;
+let busy = false;
+let timer = null;
+
+function createChart(){
+  if(typeof LightweightCharts === "undefined"){
+    $("status").textContent = "Erro: biblioteca do gráfico não carregou.";
+    return;
+  }
+
+  const el = $("chart");
+  chart = LightweightCharts.createChart(el,{
+    width:el.clientWidth,
+    height:340,
+    layout:{
+      background:{color:"#111c30"},
+      textColor:"#cbd5e1"
+    },
+    grid:{
+      vertLines:{color:"#25334a"},
+      horzLines:{color:"#25334a"}
+    },
+    rightPriceScale:{borderColor:"#34445e"},
+    timeScale:{borderColor:"#34445e",timeVisible:true},
+    crosshair:{mode:0}
+  });
+
+  candles = chart.addCandlestickSeries({
+    upColor:"#20d6a0",
+    downColor:"#ff6262",
+    borderUpColor:"#20d6a0",
+    borderDownColor:"#ff6262",
+    wickUpColor:"#20d6a0",
+    wickDownColor:"#ff6262"
+  });
+
+  emaFastLine = chart.addLineSeries({
+    color:"#ffd166",lineWidth:2
+  });
+
+  emaSlowLine = chart.addLineSeries({
+    color:"#55aaff",lineWidth:2
+  });
+
+  window.addEventListener("resize",()=>{
+    chart.applyOptions({width:el.clientWidth});
+  });
+}
+
+async function fetchJSON(url){
+  const controller = new AbortController();
+  const timeout = setTimeout(()=>controller.abort(),10000);
+
+  try{
+    const response = await fetch(url,{
+      signal:controller.signal,
+      cache:"no-store"
+    });
+
+    if(!response.ok){
+      throw new Error("Erro HTTP "+response.status);
+    }
+
+    return await response.json();
+  }finally{
+    clearTimeout(timeout);
+  }
+}
+
+function ema(values,period){
+  const result=[];
+  const multiplier=2/(period+1);
+  let previous=values[0];
+
+  values.forEach((value,index)=>{
+    previous=index===0?value:
+      value*multiplier+previous*(1-multiplier);
+    result.push(previous);
+  });
+
+  return result;
+}
+
+function calculateRSI(values){
+  if(values.length<15)return null;
+
+  let gains=0,losses=0;
+
+  for(let i=values.length-14;i<values.length;i++){
+    const change=values[i]-values[i-1];
+    if(change>0)gains+=change;
+    else losses-=change;
+  }
+
+  const avgGain=gains/14;
+  const avgLoss=losses/14;
+
+  if(avgLoss===0)return 100;
+
+  return 100-(100/(1+avgGain/avgLoss));
+}
+
+function calculateMACD(values){
+  const fast=ema(values,12);
+  const slow=ema(values,26);
+  const line=values.map((v,i)=>fast[i]-slow[i]);
+  const signal=ema(line,9);
+
+  return line.map((v,i)=>v-signal[i]);
+}
+
+function formatPrice(value){
+  return Number(value).toFixed(
+    $("pair").value==="USDJPY"?3:5
+  );
+}
+
+async function analyze(){
+  if(busy)return;
+
+  busy=true;
+  $("analyze").disabled=true;
+  $("analyze").textContent="ANALISANDO...";
+  $("status").textContent="Buscando dados reais do mercado...";
+
+  try{
+    const pair=$("pair").value;
+    const period=$("period").value;
+
+    const quoteURL=API+"/"+pair;
+    const candlesURL=API+"/"+pair+
+      "/ohlc?interval="+period+"&limit=200";
+
+    const [quote,data]=await Promise.all([
+      fetchJSON(quoteURL),
+      fetchJSON(candlesURL)
+    ]);
+
+    if(!data || !Array.isArray(data.bars)){
+      throw new Error("Formato de candles inválido.");
+    }
+
+    const bars=data.bars
+      .filter(b=>
+        b.openTime &&
+        [b.open,b.high,b.low,b.close].every(
+          v=>Number.isFinite(Number(v))
+        )
+      )
+      .map(b=>({
+        time:Math.floor(new Date(b.openTime).getTime()/1000),
+        open:Number(b.open),
+        high:Number(b.high),
+        low:Number(b.low),
+        close:Number(b.close)
+      }))
+      .filter(b=>Number.isFinite(b.time))
+      .sort((a,b)=>a.time-b.time);
+
+    if(bars.length<30){
+      throw new Error("Poucos candles disponíveis para análise.");
+    }
+
+    for(let i=1;i<bars.length;i++){
+      if(bars[i].time<=bars[i-1].time){
+        throw new Error("Dados de candles duplicados.");
+      }
+    }
+
+    if(!Number.isFinite(Number(quote.mid))){
+      throw new Error("Cotação atual indisponível.");
+    }
+
+    candles.setData(bars);
+
+    const closes=bars.map(b=>b.close);
+    const fast=ema(closes,9);
+    const slow=ema(closes,21);
+    const rsi=calculateRSI(closes);
+    const macd=calculateMACD(closes);
+
+    emaFastLine.setData(bars.map((b,i)=>({
+      time:b.time,value:fast[i]
+    })));
+
+    emaSlowLine.setData(bars.map((b,i)=>({
+      time:b.time,value:slow[i]
+    })));
+
+    chart.timeScale().fitContent();
+
+    const last=closes.length-1;
+    const histogram=macd[last];
+
+    $("price").textContent=formatPrice(quote.mid);
+    $("marketState").textContent=
+      quote.marketState==="closed"
+      ?"Mercado fechado — última cotação"
+      :"Mercado: "+(quote.marketState||"Estado não informado");
+
+    $("ema9").textContent=formatPrice(fast[last]);
+    $("ema21").textContent=formatPrice(slow[last]);
+    $("rsi").textContent=rsi===null?"--":rsi.toFixed(2);
+    $("macd").textContent=histogram.toFixed(6);
+
+    let signal="AGUARDAR";
+    let explanation="Os indicadores não confirmam uma direção.";
+
+    if(
+      fast[last]>slow[last] &&
+      histogram>0 &&
+      rsi>=50 && rsi<=70
+    ){
+      signal="COMPRA";
+      explanation="EMA 9 acima da EMA 21, MACD positivo e RSI favorável.";
+    }else if(
+      fast[last]<slow[last] &&
+      histogram<0 &&
+      rsi>=30 && rsi<=50
+    ){
+      signal="VENDA";
+      explanation="EMA 9 abaixo da EMA 21, MACD negativo e RSI favorável.";
+    }
+
+    $("signal").textContent=signal;
+    $("signal").className="signal "+
+      (signal==="COMPRA"?"green":
+      signal==="VENDA"?"red":"yellow");
+
+    $("explanation").textContent=explanation;
+    $("status").textContent=
+      "Análise concluída às "+new Date().toLocaleTimeString("pt-BR");
+
+  }catch(error){
+    $("status").textContent=
+      error.name==="AbortError"
+      ?"Tempo esgotado: a API demorou para responder."
+      :"Não foi possível analisar: "+error.message;
+
+    $("signal").textContent="SEM DADOS CONFIÁVEIS";
+    $("signal").className="signal yellow";
+    $("explanation").textContent=
+      "Aguardando uma resposta válida da API. Nenhum sinal foi gerado.";
+  }finally{
+    busy=false;
+    $("analyze").disabled=false;
+    $("analyze").textContent="ANALISAR MERCADO";
+  }
+}
+
+$("analyze").addEventListener("click",analyze);
+
+$("pair").addEventListener("change",()=>{
+  $("signal").textContent="AGUARDANDO ANÁLISE";
+  $("price").textContent="--";
+});
+
+$("period").addEventListener("change",()=>{
+  $("signal").textContent="AGUARDANDO ANÁLISE";
+});
+
+createChart();
+
+analyze();
+
+timer=setInterval(()=>{
+  analyze();
+},15000);
+</script>
+</body>
+</html>
