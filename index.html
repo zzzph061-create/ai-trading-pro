@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#10151d">
+<title>IA FUTURE | Forex Intelligence</title>
+<style>
+:root{
+ --bg:#111720;--surface:#19222e;--surface2:#202c3a;--surface3:#263545;--line:#344354;
+ --text:#edf3f8;--muted:#9aaaba;--soft:#c5d0da;--accent:#d2a96e;--accent2:#88b7c5;
+ --green:#54c69a;--red:#ec7881;--yellow:#e8c47c;--blue:#6ea8e8;--purple:#b49be8;
+ --shadow:0 14px 36px #0003;
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(ellipse at 80% -20%,#34445555,transparent 45%),var(--bg);color:var(--text);font:14px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+button,input,select{font:inherit}button{cursor:pointer;color:inherit}.app{min-height:100vh;display:grid;grid-template-columns:248px minmax(0,1fr)}
+.sidebar{height:100vh;position:sticky;top:0;background:#141c26;border-right:1px solid var(--line);padding:20px 14px;display:flex;flex-direction:column;z-index:5}
+.brand{display:flex;gap:11px;align-items:center;padding:3px 9px 24px}.brandmark{width:40px;height:40px;border-radius:13px;background:linear-gradient(145deg,#e2c08a,#8cb9c5);color:#15202a;display:grid;place-items:center;font-weight:900;font-size:19px;box-shadow:0 7px 20px #0004}.brand b{letter-spacing:1.8px;font-size:16px}.brand small{display:block;color:var(--muted);font-size:9px;letter-spacing:2px}
+.navtitle{color:#718295;font-size:10px;letter-spacing:1.6px;padding:13px 10px 7px}.nav{display:flex;align-items:center;gap:11px;border:0;background:transparent;color:#aebdca;padding:11px 12px;border-radius:10px;text-align:left;margin:2px 0;width:100%;transition:.2s}.nav:hover,.nav.active{background:#2b3948;color:#fff}.nav .ico{width:20px;text-align:center;font-size:16px}.sidefoot{margin-top:auto;border-top:1px solid var(--line);padding:14px 8px 0;color:var(--muted);font-size:11px}
+main{min-width:0;padding:25px clamp(15px,3vw,38px) 90px;max-width:1600px;width:100%;margin:auto}.topbar{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:23px}.eyebrow{color:var(--accent);font-size:10px;letter-spacing:2px;font-weight:700}.topbar h1{font-size:25px;line-height:1.2;margin:4px 0 0;letter-spacing:-.5px}.topright{display:flex;gap:9px;align-items:center}.status{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:#1b2733;border-radius:30px;padding:7px 11px;color:var(--soft);font-size:11px}.dot{width:7px;height:7px;border-radius:50%;background:var(--yellow);box-shadow:0 0 10px currentColor}.btn{border:1px solid var(--line);background:var(--surface2);padding:9px 13px;border-radius:10px;color:var(--text);transition:.2s}.btn:hover{border-color:var(--accent);transform:translateY(-1px)}.btn.primary{background:var(--accent);color:#18212a;border-color:var(--accent);font-weight:750}.btn.ghost{background:transparent}.btn.small{font-size:11px;padding:6px 9px}
+.page{display:none;animation:fade .25s ease}.page.active{display:block}@keyframes fade{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+.grid{display:grid;gap:15px}.stats{grid-template-columns:repeat(4,minmax(0,1fr));margin-bottom:16px}.card{background:linear-gradient(145deg,#1c2733,#18222d);border:1px solid var(--line);border-radius:16px;padding:17px;box-shadow:var(--shadow);min-width:0}.statlabel{color:var(--muted);font-size:11px}.statvalue{font-size:22px;font-weight:750;margin-top:5px;letter-spacing:-.4px}.statnote{font-size:10px;color:var(--muted);margin-top:4px}.sectionhead{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:23px 0 12px}.sectionhead h2{font-size:16px;margin:0}.sectionhead p{font-size:11px;color:var(--muted);margin:3px 0 0}.tag{font-size:10px;border-radius:30px;padding:4px 8px;background:#2b3947;color:#cbd7e1;border:1px solid #3b4c5d;white-space:nowrap}.tag.green{color:#91e2bf;background:#1e3b35;border-color:#2c6250}.tag.yellow{color:#f0d79e;background:#423a2b;border-color:#66583b}.tag.red{color:#ffabb1;background:#482e36;border-color:#70404a}
+.pairs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}.pair{border:1px solid var(--line);background:#1b2733;border-radius:12px;padding:12px;text-align:left;transition:.2s}.pair strong{font-size:14px;display:block}.pair span{color:var(--muted);font-size:10px}.pair.active{border-color:var(--accent);background:#3a332a;box-shadow:inset 0 0 0 1px #d2a96e44}
+.overviewgrid{grid-template-columns:minmax(0,1.55fr) minmax(260px,.8fr)}.chartbox{padding:0;overflow:hidden}.charthead{display:flex;align-items:center;justify-content:space-between;padding:15px 17px;border-bottom:1px solid var(--line);gap:10px}.charthead h3{margin:0;font-size:14px}.tvframe{height:430px;background:#101820}.tvframe iframe{width:100%;height:100%;border:0}.chartnote{padding:9px 14px;color:var(--muted);font-size:10px;border-top:1px solid var(--line)}
+.robotgrid{grid-template-columns:repeat(4,minmax(0,1fr))}.robot{position:relative;overflow:hidden;min-height:235px;padding:15px}.robot:before{content:"";position:absolute;width:150px;height:150px;border-radius:50%;right:-45px;top:-65px;background:var(--robot);opacity:.10;filter:blur(8px)}.robothead{display:flex;justify-content:space-between;align-items:center;position:relative}.robotname{font-weight:800;letter-spacing:1px}.robotrole{color:var(--muted);font-size:10px}.robotstage{height:105px;display:flex;align-items:center;justify-content:center;position:relative}.bot{width:62px;height:66px;position:relative;animation:float 3s ease-in-out infinite;filter:drop-shadow(0 9px 5px #0005)}.bothead{position:absolute;left:9px;top:0;width:44px;height:34px;background:var(--robot);border:3px solid #dce5eb;border-radius:12px 12px 9px 9px;box-shadow:inset -5px -5px #0002}.bothead:before,.bothead:after{content:"";position:absolute;top:12px;width:6px;height:7px;border-radius:3px;background:#17212b;box-shadow:0 0 7px #fff}.bothead:before{left:8px}.bothead:after{right:8px}.botbody{position:absolute;left:14px;top:37px;width:34px;height:25px;background:var(--robot);border:3px solid #dce5eb;border-radius:8px}.arm{position:absolute;top:40px;width:9px;height:23px;border-radius:8px;background:var(--robot);border:2px solid #dce5eb;transform-origin:top}.arm.left{left:4px;animation:workarm 1.2s ease-in-out infinite}.arm.right{right:4px;animation:workarm 1.2s ease-in-out infinite reverse}.bot.working{animation:float .8s ease-in-out infinite}.bot.resting{animation:rest 3s ease-in-out infinite}.deskline{position:absolute;bottom:12px;width:112px;height:3px;background:#607080;border-radius:5px;opacity:.5}.robotstatus{font-size:10px;color:var(--muted);display:flex;align-items:center;gap:6px}.robotstatus i{width:6px;height:6px;background:var(--green);border-radius:50%}.robotdesc{font-size:11px;color:var(--soft);margin-top:7px}.robotmetric{margin-top:11px;padding-top:9px;border-top:1px solid var(--line);display:flex;justify-content:space-between;color:var(--muted);font-size:10px}
+@keyframes float{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-7px) rotate(1deg)}}@keyframes workarm{0%,100%{transform:rotate(-18deg)}50%{transform:rotate(25deg)}}@keyframes rest{0%,100%{transform:translateY(2px) rotate(0)}50%{transform:translateY(5px) rotate(5deg)}}
+.two{grid-template-columns:1fr 1fr}.signalbox{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center}.signalbig{font-size:22px;font-weight:850;letter-spacing:.5px}.signalempty{color:var(--muted);font-size:13px}.signalaction{font-size:11px;color:var(--accent);font-weight:750;margin-top:3px}.list{display:grid;gap:9px}.rowitem{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);font-size:12px}.rowitem:last-child{border:0}.muted{color:var(--muted)}.indicatorgrid{grid-template-columns:repeat(3,minmax(0,1fr))}.indicator{background:#1a2632;border:1px solid var(--line);border-radius:11px;padding:11px}.indicator b{font-size:11px;display:block}.indicator small{color:var(--muted);font-size:10px}.indicator .state{display:block;margin-top:7px;font-size:10px;color:var(--yellow)}
+.tabs{display:flex;gap:7px;flex-wrap:wrap}.tab{border:1px solid var(--line);background:#1b2733;border-radius:9px;padding:7px 11px;font-size:11px;color:var(--muted)}.tab.active{color:var(--text);border-color:var(--accent);background:#3a332a}
+.roomgrid{grid-template-columns:repeat(2,minmax(0,1fr))}.room{min-height:250px}.room .robotstage{height:130px}.room .bot{transform:scale(1.25)}.roomdetails{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
+.notice{border:1px solid #6a5838;background:#3b3327;color:#ead6ad;padding:12px 14px;border-radius:12px;font-size:11px;line-height:1.55}.notice strong{color:#fff0c9}.tablewrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:540px;font-size:11px}th,td{text-align:left;padding:11px 9px;border-bottom:1px solid var(--line)}th{color:var(--muted);font-weight:600}
+.mobilebar{display:none}
+@media(max-width:1050px){.app{grid-template-columns:210px 1fr}.robotgrid{grid-template-columns:repeat(2,minmax(0,1fr))}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.overviewgrid{grid-template-columns:1fr}}
+@media(max-width:680px){.app{display:block}.sidebar{display:none}main{padding:17px 13px 90px}.topbar{align-items:flex-start}.topbar h1{font-size:21px}.topright .status{display:none}.stats{gap:9px}.card{padding:13px;border-radius:13px}.statvalue{font-size:19px}.pairs{gap:7px}.pair{padding:10px 8px}.pair strong{font-size:12px}.robotgrid{gap:9px}.robot{padding:12px;min-height:220px}.two,.roomgrid{grid-template-columns:1fr}.indicatorgrid{grid-template-columns:repeat(2,minmax(0,1fr))}.tvframe{height:390px}.mobilebar{display:flex;position:fixed;z-index:10;bottom:0;left:0;right:0;padding:8px 5px calc(8px + env(safe-area-inset-bottom));background:#141d28f2;backdrop-filter:blur(16px);border-top:1px solid var(--line);justify-content:space-around}.mobilebar button{border:0;background:transparent;color:var(--muted);font-size:9px;display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px}.mobilebar button.active{color:var(--accent)}.mobilebar span{font-size:17px}.sectionhead{margin-top:19px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar">
+ <div class="brand"><div class="brandmark">IF</div><div><b>IA FUTURE</b><small>FOREX INTELLIGENCE</small></div></div>
+ <div class="navtitle">PLATAFORMA</div>
+ <button class="nav active" data-page="overview"><span class="ico">◫</span> Visão geral</button>
+ <button class="nav" data-page="market"><span class="ico">▥</span> Mercado Forex</button>
+ <button class="nav" data-page="office"><span class="ico">♙</span> Escritório IA</button>
+ <button class="nav" data-page="signals"><span class="ico">⌁</span> Central de sinais</button>
+ <div class="navtitle">CONTROLE</div>
+ <button class="nav" data-page="risk"><span class="ico">◈</span> Gerenciamento de risco</button>
+ <button class="nav" data-page="history"><span class="ico">▤</span> Histórico</button>
+ <button class="nav" data-page="reports"><span class="ico">▧</span> Relatórios técnicos</button>
+ <div class="sidefoot">Sistema em preparação<br><span style="color:var(--accent)">●</span> Modo demonstração disponível</div>
+</aside>
+<main>
+ <header class="topbar"><div><div class="eyebrow">CENTRAL DE INTELIGÊNCIA</div><h1 id="pagetitle">Visão geral</h1></div><div class="topright"><span class="status"><i class="dot"></i><span id="connection">Feed real não conectado</span></span><button class="btn small" id="soundBtn">♫ Som: desligado</button></div></header>
+
+<section class="page active" id="page-overview">
+ <div class="grid stats">
+  <div class="card"><div class="statlabel">Ativo selecionado</div><div class="statvalue" id="statPair">EUR/USD</div><div class="statnote">Par em análise</div></div>
+  <div class="card"><div class="statlabel">Estado da análise</div><div class="statvalue" style="font-size:18px" id="statState">Aguardando dados</div><div class="statnote">Sem sinal real liberado</div></div>
+  <div class="card"><div class="statlabel">Agentes ativos</div><div class="statvalue">04 / 04</div><div class="statnote">Quatro módulos especializados</div></div>
+  <div class="card"><div class="statlabel">Modo operacional</div><div class="statvalue" style="font-size:18px">Demonstração</div><div class="statnote">Sem execução de ordens</div></div>
+ </div>
+ <div class="sectionhead"><div><h2>Escolha o par Forex</h2><p>Selecione o ativo que os quatro agentes irão analisar</p></div><span class="tag">4 ativos iniciais</span></div>
+ <div class="pairs" id="pairButtons">
+  <button class="pair active" data-symbol="FX:EURUSD"><strong>EUR/USD</strong><span>Euro / Dólar</span></button>
+  <button class="pair" data-symbol="FX:GBPUSD"><strong>GBP/USD</strong><span>Libra / Dólar</span></button>
+  <button class="pair" data-symbol="FX:USDJPY"><strong>USD/JPY</strong><span>Dólar / Iene</span></button>
+  <button class="pair" data-symbol="FX:AUDUSD"><strong>AUD/USD</strong><span>Dólar australiano</span></button>
+ </div>
+ <div class="sectionhead"><div><h2>Visão do mercado</h2><p>Gráfico TradingView do ativo selecionado</p></div><button class="btn small" data-goto="market">Abrir mercado ↗</button></div>
+ <div class="grid overviewgrid">
+  <div class="card chartbox"><div class="charthead"><h3 id="chartPair">EUR/USD · TradingView</h3><span class="tag">Gráfico incorporado</span></div><div class="tvframe" id="tv-overview"></div><div class="chartnote">O gráfico é fornecido pelo TradingView. A incorporação visual não disponibiliza automaticamente seus dados internos para os cálculos dos agentes.</div></div>
+  <div class="card"><div class="sectionhead" style="margin:0 0 10px"><div><h2>Central de decisão</h2><p>Estado atual do motor de análise</p></div><span class="tag yellow">Aguardando feed</span></div><div class="signalempty">Nenhum sinal real está disponível. Conecte uma fonte de cotações antes de calcular COMPRA ou VENDA.</div><div class="rowitem"><span class="muted">SIGMA · M15</span><b>Aguardando</b></div><div class="rowitem"><span class="muted">NEURAL · Padrões</span><b>Aguardando</b></div><div class="rowitem"><span class="muted">INFINITY · M5/M1</span><b>Aguardando</b></div><div class="rowitem"><span class="muted">ORION · Risco</span><b>Aguardando</b></div><button class="btn primary" style="width:100%;margin-top:12px" data-goto="signals">Ver central de sinais</button></div>
+ </div>
+ <div class="sectionhead"><div><h2>Equipe IA</h2><p>Quatro especialistas, quatro funções complementares</p></div><button class="btn small" data-goto="office">Visitar escritório ↗</button></div>
+ <div class="grid robotgrid" id="robotCards"></div>
+ <div class="notice" style="margin-top:15px"><strong>Transparência:</strong> esta versão é a estrutura funcional da plataforma. Os indicadores, robôs e sinais só poderão produzir análises reais depois da conexão de uma fonte de cotações Forex e da implementação/teste dos motores de cálculo. Nenhum dado demonstrativo será apresentado como cotação real.</div>
+</section>
+
+<section class="page" id="page-market">
+ <div class="sectionhead" style="margin-top:0"><div><h2>Mercado Forex</h2><p>Ativo, período e gráfico incorporado do TradingView</p></div><span class="tag">TradingView</span></div>
+ <div class="pairs" id="pairButtons2">
+  <button class="pair active" data-symbol="FX:EURUSD"><strong>EUR/USD</strong><span>Euro / Dólar</span></button><button class="pair" data-symbol="FX:GBPUSD"><strong>GBP/USD</strong><span>Libra / Dólar</span></button><button class="pair" data-symbol="FX:USDJPY"><strong>USD/JPY</strong><span>Dólar / Iene</span></button><button class="pair" data-symbol="FX:AUDUSD"><strong>AUD/USD</strong><span>Dólar australiano</span></button>
+ </div>
+ <div class="card chartbox" style="margin-top:14px"><div class="charthead"><h3 id="marketPair">EUR/USD · TradingView</h3><div class="tabs" id="timeTabs"><button class="tab" data-interval="1">M1</button><button class="tab active" data-interval="5">M5</button><button class="tab" data-interval="15">M15</button></div></div><div class="tvframe" id="tv-market" style="height:570px"></div><div class="chartnote">O período altera a visualização do gráfico TradingView. Os agentes usarão dados próprios de uma fonte conectada, quando configurada.</div></div>
+ <div style="margin-top:13px"><button class="btn" id="addPair">＋ Adicionar outro par</button> <span class="muted" style="font-size:11px">A inclusão de novos pares depende da disponibilidade do provedor de dados.</span></div>
+</section>
+
+<section class="page" id="page-office">
+ <div class="sectionhead" style="margin-top:0"><div><h2>Escritório dos quatro agentes</h2><p>Salas individuais, atividades e especialidades</p></div><span class="tag green">Animações ativas</span></div>
+ <div class="grid roomgrid" id="rooms"></div>
+ <div class="notice" style="margin-top:15px">As animações representam o estado visual dos agentes. Elas serão sincronizadas com tarefas reais quando os motores de análise estiverem conectados. Pausas são apenas comportamentais e não devem interromper o processamento.</div>
+</section>
+
+<section class="page" id="page-signals">
+ <div class="sectionhead" style="margin-top:0"><div><h2>Central de sinais</h2><p>Critérios de liberação e confirmação</p></div><span class="tag yellow">Sem feed conectado</span></div>
+ <div class="card">
+  <div class="signalbox"><div><div class="statlabel">SINAL ATUAL · <span id="signalPair">EUR/USD</span></div><div class="signalbig">AGUARDANDO DADOS</div><div class="signalempty">COMPRA ou VENDA não será inventado sem candles reais.</div></div><span class="tag yellow">Bloqueado</span></div>
+  <div class="notice" style="margin-top:15px">A indicação “ENTRAR NA PRÓXIMA VELA” só aparecerá após confirmação no fechamento do candle M1, com tendência M15, confirmação M5, gatilho M1 e validação de risco.</div>
+ </div>
+ <div class="sectionhead"><div><h2>Checklist de liberação</h2><p>Todos os critérios obrigatórios precisam ser aprovados</p></div></div>
+ <div class="grid two">
+  <div class="card list"><div class="rowitem"><b>SIGMA · Tendência M15</b><span class="tag yellow">Aguardando 10 candles</span></div><div class="rowitem"><b>NEURAL · Padrões</b><span class="tag yellow">Aguardando dados</span></div><div class="rowitem"><b>INFINITY · Confirmação M5/M1</b><span class="tag yellow">Aguardando dados</span></div><div class="rowitem"><b>ORION · Risco</b><span class="tag yellow">Aguardando dados</span></div></div>
+  <div class="card"><h3 style="font-size:13px;margin:0 0 10px">Regras fixas</h3><div class="rowitem"><span>10 candles M15 fechados</span><b>Obrigatório</b></div><div class="rowitem"><span>Confirmação M5</span><b>Obrigatório</b></div><div class="rowitem"><span>Gatilho M1 fechado</span><b>Obrigatório</b></div><div class="rowitem"><span>Bloqueio pós-entrada</span><b>10 candles</b></div></div>
+ </div>
+</section>
+
+<section class="page" id="page-risk">
+ <div class="sectionhead" style="margin-top:0"><div><h2>Gerenciamento de risco</h2><p>Regras de proteção antes de qualquer entrada</p></div></div>
+ <div class="grid stats"><div class="card"><div class="statlabel">Estado</div><div class="statvalue" style="font-size:18px">Proteção ativa</div><div class="statnote">Modo demonstrativo</div></div><div class="card"><div class="statlabel">Bloqueio após entrada</div><div class="statvalue">10 candles</div><div class="statnote">Regra configurada</div></div><div class="card"><div class="statlabel">Risco por operação</div><div class="statvalue">A definir</div><div class="statnote">Não executar ordens</div></div><div class="card"><div class="statlabel">Stop / alvo</div><div class="statvalue">Técnicos</div><div class="statnote">Dependem de volatilidade e estratégia</div></div></div>
+ <div class="grid two"><div class="card"><h3 style="margin-top:0;font-size:14px">Verificações ORION</h3><div class="rowitem"><span>Spread elevado</span><b>Verificar feed</b></div><div class="rowitem"><span>Volatilidade anormal (ATR)</span><b>Verificar feed</b></div><div class="rowitem"><span>Relação risco/retorno</span><b>Não calculada</b></div><div class="rowitem"><span>Exposição da conta</span><b>Sem conexão</b></div></div><div class="card"><h3 style="margin-top:0;font-size:14px">Política de proteção</h3><p class="muted" style="font-size:12px">ORION terá poder de veto: mesmo com os outros agentes favoráveis, um risco fora dos limites bloqueia o sinal. A plataforma não enviará ordens à corretora nesta versão.</p></div></div>
+</section>
+
+<section class="page" id="page-history">
+ <div class="sectionhead" style="margin-top:0"><div><h2>Histórico</h2><p>Registro de sinais e operações validadas</p></div><span class="tag">Local nesta versão</span></div>
+ <div class="card"><div class="signalempty">Ainda não existem operações registradas. Os eventos só serão adicionados quando houver análises calculadas com dados reais ou testes explicitamente marcados como demonstração.</div><div class="tablewrap" style="margin-top:14px"><table><thead><tr><th>Data/hora</th><th>Ativo</th><th>Direção</th><th>Período</th><th>Modo</th><th>Estado</th></tr></thead><tbody id="historyRows"><tr><td colspan="6" class="muted">Nenhum registro</td></tr></tbody></table></div></div>
+</section>
+
+<section class="page" id="page-reports">
+ <div class="sectionhead" style="margin-top:0"><div><h2>Relatórios técnicos</h2><p>Indicadores previstos para cada agente</p></div><span class="tag yellow">Aguardando feed para cálculo</span></div>
+ <div class="tabs" id="agentTabs"><button class="tab active" data-agent="sigma">SIGMA</button><button class="tab" data-agent="neural">NEURAL</button><button class="tab" data-agent="infinity">INFINITY</button><button class="tab" data-agent="orion">ORION</button></div>
+ <div class="card" style="margin-top:12px"><h3 id="agentTitle" style="margin:0 0 4px;font-size:15px">SIGMA · Tendência e estrutura</h3><p class="muted" id="agentDesc" style="font-size:11px;margin:0 0 13px">Indicadores e métodos técnicos previstos</p><div class="grid indicatorgrid" id="indicatorList"></div></div>
+ <div class="notice" style="margin-top:14px">A lista representa os métodos previstos para implementação. Os estados não são resultados de mercado. A análise real exige candles OHLCV confiáveis, cálculo validado dos indicadores, tratamento de fuso horário, spread e qualidade do feed.</div>
+</section>
+</main>
+</div>
+<nav class="mobilebar">
+ <button class="active" data-page="overview"><span>◫</span>Início</button><button data-page="market"><span>▥</span>Mercado</button><button data-page="office"><span>♙</span>Robôs</button><button data-page="signals"><span>⌁</span>Sinais</button><button data-page="risk"><span>◈</span>Risco</button>
+</nav>
+<script>
+const agents=[
+ {id:'sigma',name:'SIGMA',role:'Tendência e estrutura · M15',color:'#6ea8e8',desc:'Define contexto, direção e estrutura do mercado.',tasks:['Lendo estrutura de mercado','Comparando médias móveis','Mapeando suportes e resistências','Pausa para café'],inds:['EMA 9 / 20 / 50 / 100 / 200','SMA 50 / 200','ADX e DMI','MACD','Parabolic SAR','Ichimoku Cloud','Supertrend','VWAP (quando aplicável)','Topos e fundos','Suportes e resistências','Tendência e lateralização']},
+ {id:'neural',name:'NEURAL',role:'Padrões e comportamento',color:'#b49be8',desc:'Reconhece formações de candles, padrões gráficos e contexto.',tasks:['Comparando padrões de candles','Verificando rompimentos','Analisando retrações Fibonacci','Pausa para água'],inds:['Engolfo de alta e baixa','Doji, Pin Bar e Martelo','Estrela cadente','Morning Star / Evening Star','Inside Bar / Outside Bar','Triângulos, bandeiras e canais','Rompimentos e falsos rompimentos','Retestes de regiões','Fibonacci e retrações','Divergências técnicas']},
+ {id:'infinity',name:'INFINITY',role:'Confirmação e entrada · M5/M1',color:'#54c69a',desc:'Verifica momentum, volatilidade e gatilhos de entrada.',tasks:['Validando RSI e MACD','Alternando M5 e M1','Conferindo gatilho de entrada','Pausa rápida'],inds:['RSI','Estocástico','CCI','Williams %R','MACD','Momentum','Bollinger Bands','ATR','Volume / tick volume','Rompimento de máximas e mínimas','Alinhamento M15 / M5 / M1']},
+ {id:'orion',name:'ORION',role:'Risco e proteção',color:'#e5a36b',desc:'Avalia condições de risco e pode vetar qualquer operação.',tasks:['Calculando risco planejado','Monitorando volatilidade','Verificando spread','Pausa para café'],inds:['Stop Loss técnico','Take Profit técnico','Relação risco/retorno','ATR e volatilidade','Dimensionamento de posição','Limite de exposição','Spread e liquidez','Bloqueio de entradas repetidas','Cooldown de 10 candles','Filtro de eventos e condições anormais']}
+];
+let selected='FX:EURUSD',interval='5',sound=false,history=[];
+const names={'FX:EURUSD':'EUR/USD','FX:GBPUSD':'GBP/USD','FX:USDJPY':'USD/JPY','FX:AUDUSD':'AUD/USD'};
+function robotMarkup(a,room=false){return `<div class="card robot ${room?'room':''}" style="--robot:${a.color}"><div class="robothead"><div><div class="robotname">${a.name}</div><div class="robotrole">${a.role}</div></div><span class="tag">AGENTE IA</span></div><div class="robotstage"><div class="bot working"><div class="bothead"></div><div class="botbody"></div><div class="arm left"></div><div class="arm right"></div></div><div class="deskline"></div></div><div class="robotstatus"><i></i><span class="task">${a.tasks[0]}</span></div><div class="robotdesc">${a.desc}</div><div class="robotmetric"><span>Indicadores previstos</span><b>${a.inds.length}</b></div>${room?`<div class="roomdetails"><span class="tag">Análise independente</span><span class="tag">Pausa alternada</span><span class="tag">Veto/validação conforme função</span></div>`:''}</div>`}
+document.getElementById('robotCards').innerHTML=agents.map(a=>robotMarkup(a)).join('');
+document.getElementById('rooms').innerHTML=agents.map(a=>robotMarkup(a,true)).join('');
+let taskIndex=0;setInterval(()=>{taskIndex++;document.querySelectorAll('.robot').forEach((el,i)=>{const a=agents[i%4];const task=a.tasks[(taskIndex+i)%a.tasks.length];el.querySelector('.task').textContent=task;const bot=el.querySelector('.bot');bot.classList.toggle('resting',task.toLowerCase().includes('pausa'));bot.classList.toggle('working',!task.toLowerCase().includes('pausa'));});},4200);
+function renderTV(target){const container=document.getElementById(target);if(!container)return;container.innerHTML='';const div=document.createElement('div');div.style.height='100%';div.className='tradingview-widget-container';const inner=document.createElement('div');inner.className='tradingview-widget-container__widget';inner.style.height='100%';inner.style.width='100%';div.appendChild(inner);const script=document.createElement('script');script.type='text/javascript';script.src='https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js';script.async=true;script.innerHTML=JSON.stringify({autosize:true,symbol:selected,interval:interval,timezone:'America/Sao_Paulo',theme:'dark',style:'1',locale:'br',allow_symbol_change:true,calendar:false,support_host:'https://www.tradingview.com'});div.appendChild(script);container.appendChild(div);}
+function updatePair(symbol){selected=symbol;document.querySelectorAll('.pair').forEach(b=>b.classList.toggle('active',b.dataset.symbol===symbol));const pair=names[symbol]||symbol;['statPair','chartPair','marketPair','signalPair'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=id==='chartPair'||id==='marketPair'?pair+' · TradingView':pair});renderTV('tv-overview');renderTV('tv-market')}
+function selectPage(name){document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id==='page-'+name));document.querySelectorAll('[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===name));const titles={overview:'Visão geral',market:'Mercado Forex',office:'Escritório IA',signals:'Central de sinais',risk:'Gerenciamento de risco',history:'Histórico',reports:'Relatórios técnicos'};document.getElementById('pagetitle').textContent=titles[name]||'IA FUTURE';if(name==='market')renderTV('tv-market');window.scrollTo({top:0,behavior:'smooth'})}
+document.querySelectorAll('[data-page]').forEach(b=>b.addEventListener('click',()=>selectPage(b.dataset.page)));
+document.querySelectorAll('[data-goto]').forEach(b=>b.addEventListener('click',()=>selectPage(b.dataset.goto)));
+document.querySelectorAll('.pair').forEach(b=>b.addEventListener('click',()=>updatePair(b.dataset.symbol)));
+document.querySelectorAll('[data-interval]').forEach(b=>b.addEventListener('click',()=>{interval=b.dataset.interval;document.querySelectorAll('[data-interval]').forEach(x=>x.classList.toggle('active',x===b));renderTV('tv-market')}));
+document.getElementById('addPair').addEventListener('click',()=>{const pair=prompt('Digite o par Forex (ex.: NZD/USD):');if(!pair)return;const symbol='FX:'+pair.toUpperCase().replace('/','').replace(/\s/g,'');if(!/^[A-Z]{6}$/.test(symbol.slice(3))){alert('Formato inválido. Use seis letras, como NZD/USD.');return}names[symbol]=pair.toUpperCase();['pairButtons','pairButtons2'].forEach(id=>{const b=document.createElement('button');b.className='pair';b.dataset.symbol=symbol;b.innerHTML=`<strong>${names[symbol]}</strong><span>Par adicionado</span>`;b.addEventListener('click',()=>updatePair(symbol));document.getElementById(id).appendChild(b)});updatePair(symbol)});
+document.getElementById('soundBtn').addEventListener('click',()=>{sound=!sound;document.getElementById('soundBtn').textContent='♫ Som: '+(sound?'ligado':'desligado');if(sound&&'Notification'in window&&Notification.permission==='default')Notification.requestPermission()});
+const agentText={sigma:['SIGMA · Tendência e estrutura','Contexto de tendência no M15.'],neural:['NEURAL · Padrões e comportamento','Reconhecimento de padrões gráficos e de candles.'],infinity:['INFINITY · Confirmação e entrada','Momentum, volatilidade e gatilhos M5/M1.'],orion:['ORION · Risco e proteção','Gestão, exposição e filtros de segurança.']};
+function showAgent(id){const a=agents.find(x=>x.id===id);document.getElementById('agentTitle').textContent=agentText[id][0];document.getElementById('agentDesc').textContent=agentText[id][1];document.getElementById('indicatorList').innerHTML=a.inds.map(x=>`<div class="indicator"><b>${x}</b><small>${a.name}</small><span class="state">◷ Aguardando feed para cálculo</span></div>`).join('');document.querySelectorAll('[data-agent]').forEach(b=>b.classList.toggle('active',b.dataset.agent===id))}
+document.querySelectorAll('[data-agent]').forEach(b=>b.addEventListener('click',()=>showAgent(b.dataset.agent)));
+showAgent('sigma');updatePair(selected);
+</script>
+</body>
+</html>
